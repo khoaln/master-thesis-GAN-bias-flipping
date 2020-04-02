@@ -1,0 +1,16 @@
+multifc-data/test0.txt
+multifc-data/train1.txt
+multifc-data/train2.txt
+multifc-data/valid1.txt
+multifc-data/valid2.txt
+pan-data/train1.txt
+pan-data/train2.txt
+pan-data/valid1.txt
+pan-data/valid2.txt
+report/masters/missfont.log
+report/masters/texput.log
+report/masters/Thesis.bbl
+report/masters/Thesis.blg
+report/masters/Thesis.fdb_latexmk
+report/masters/Thesis.fls
+Thesis.synctex.gz

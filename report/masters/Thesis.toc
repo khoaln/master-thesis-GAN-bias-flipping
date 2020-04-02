@@ -27,3 +27,5 @@
 \vspace {2em}
 \contentsline {chapter}{List of Figures}{11}{dummy.29}% 
 \contentsline {chapter}{List of Tables}{15}{dummy.31}% 
+\vspace {2em}
+\contentsline {chapter}{Bibliography}{17}{dummy.33}% 
