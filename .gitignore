@@ -14,3 +14,9 @@ report/masters/Thesis.blg
 report/masters/Thesis.fdb_latexmk
 report/masters/Thesis.fls
 Thesis.synctex.gz
+ARAE-master/yelp/data/test0.txt
+ARAE-master/yelp/data/test1.txt
+ARAE-master/yelp/data/train1.txt
+ARAE-master/yelp/data/train2.txt
+ARAE-master/yelp/data/valid1.txt
+ARAE-master/yelp/data/valid2.txt
