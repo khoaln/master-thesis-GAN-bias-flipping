@@ -710,3 +710,11 @@ with open("{}/log.txt".format(args.outf), 'a') as f:
                    test_loss, math.exp(test_loss), accuracy))
     f.write('-' * 89)
     f.write('\n')
+
+# test classifier ----------------------------
+classify_loss1, classify_acc1 = train_classifier(1, test1_data)
+classify_loss2, classify_acc2 = train_classifier(2, test2_data)
+classify_loss = (classify_loss1 + classify_loss2) / 2
+classify_acc = (classify_acc1 + classify_acc2) / 2
+print("Classify loss: {:5.2f} | Classify accuracy: {:3.3f}\n".format(
+                    classify_loss, classify_acc))
