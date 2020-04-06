@@ -20,3 +20,11 @@ ARAE-master/yelp/data/train1.txt
 ARAE-master/yelp/data/train2.txt
 ARAE-master/yelp/data/valid1.txt
 ARAE-master/yelp/data/valid2.txt
+pan-data/content/train1.txt
+pan-data/content/train2.txt
+pan-data/content/valid1.txt
+pan-data/content/valid2.txt
+pan-data/title/train1.txt
+pan-data/title/train2.txt
+pan-data/title/valid1.txt
+pan-data/title/valid2.txt
