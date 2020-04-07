@@ -713,13 +713,13 @@ with open("{}/log.txt".format(args.outf), 'a') as f:
 
 # test classifier ----------------------------
 classify_loss, classify_acc = 0, 0
-for niter in len(test1_data):
-    classify_loss1, classify_acc1 = train_classifier(1, test1_data)
+for niter in range(len(test1_data)):
+    classify_loss1, classify_acc1 = train_classifier(1, test1_data[niter])
     classify_loss += classify_loss1
     classify_acc += classify_acc1
 
-for niter in len(test2_data):
-    classify_loss2, classify_acc2 = train_classifier(2, test2_data)
+for niter in range(len(test2_data)):
+    classify_loss2, classify_acc2 = train_classifier(2, test2_data[niter])
     classify_loss += classify_loss2
     classify_acc += classify_acc2
 
