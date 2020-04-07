@@ -727,3 +727,7 @@ classify_loss = classify_loss / (len(test1_data) + len(test2_data))
 classify_acc = classify_acc / (len(test1_data) + len(test2_data))
 print("Classify loss: {:5.2f} | Classify accuracy: {:3.3f}\n".format(
                     classify_loss, classify_acc))
+
+with open("{}/log.txt".format(args.outf), 'a') as f:
+    f.write("Classify loss: {:5.2f} | Classify accuracy: {:3.3f}\n".format(
+                    classify_loss, classify_acc))
