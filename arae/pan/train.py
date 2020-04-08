@@ -640,7 +640,7 @@ for epoch in range(1, args.epochs+1):
 
     # end of epoch ----------------------------
     # evaluation
-    test_loss, accuracy = evaluate_autoencoder(1, test1_data[:1000], epoch)
+    test_loss, accuracy = evaluate_autoencoder(1, test1_data[:args.test_eval], epoch)
     print('-' * 89)
     print('| end of epoch {:3d} | time: {:5.2f}s | test loss {:5.2f} | '
           'test ppl {:5.2f} | acc {:3.3f}'.
@@ -656,7 +656,7 @@ for epoch in range(1, args.epochs+1):
         f.write('-' * 89)
         f.write('\n')
     
-    test_loss, accuracy = evaluate_autoencoder(2, test2_data[:1000], epoch)
+    test_loss, accuracy = evaluate_autoencoder(2, test2_data[:args.test_eval], epoch)
     print('-' * 89)
     print('| end of epoch {:3d} | time: {:5.2f}s | test loss {:5.2f} | '
           'test ppl {:5.2f} | acc {:3.3f}'.
