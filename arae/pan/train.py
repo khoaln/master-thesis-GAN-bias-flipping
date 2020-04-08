@@ -357,7 +357,10 @@ def evaluate_autoencoder(whichdecoder, data_source, epoch):
                 f_trans.write(chars)
                 f_trans.write("\n")
 
-    return total_loss[0] / len(data_source), all_accuracies/bcnt
+    if isinstance(total_loss, int):
+        return total_loss / len(data_source), all_accuracies/bcnt
+    else:
+        return total_loss[0] / len(data_source), all_accuracies/bcnt
 
 
 def evaluate_generator(whichdecoder, noise, epoch):
