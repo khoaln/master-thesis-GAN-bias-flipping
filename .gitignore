@@ -28,3 +28,9 @@ pan-data/title/train1.txt
 pan-data/title/train2.txt
 pan-data/title/valid1.txt
 pan-data/title/valid2.txt
+arae/pan/data/test0.txt
+arae/pan/data/test1.txt
+arae/pan/data/train1.txt
+arae/pan/data/train2.txt
+arae/pan/data/valid1.txt
+arae/pan/data/valid2.txt
