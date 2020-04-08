@@ -115,6 +115,7 @@ parser.add_argument('--no-cuda', dest='cuda', action='store_true',
                     help='not using CUDA')
 parser.set_defaults(cuda=True)
 parser.add_argument('--device_id', type=str, default='0')
+parser.add_argument('--test_eval', type=int, default=1000)
 
 args = parser.parse_args()
 print(vars(args))

@@ -34,3 +34,11 @@ arae/pan/data/train1.txt
 arae/pan/data/train2.txt
 arae/pan/data/valid1.txt
 arae/pan/data/valid2.txt
+pan-data-article/content/train1.txt
+pan-data-article/content/train2.txt
+pan-data-article/content/valid1.txt
+pan-data-article/content/valid2.txt
+pan-data-article/title/train1.txt
+pan-data-article/title/train2.txt
+pan-data-article/title/valid1.txt
+pan-data-article/title/valid2.txt
