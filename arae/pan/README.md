@@ -1,4 +1,4 @@
-# ARAE for language style transfer on Yelp
+# ARAE for language style transfer on PAN
 
     python train.py --data_path ./data
     
