@@ -17,11 +17,11 @@ from utils import to_gpu, Corpus, batchify
 from models import Seq2Seq2Decoder, Seq2Seq, MLP_D, MLP_G, MLP_Classify
 import shutil
 
-parser = argparse.ArgumentParser(description='ARAE for Yelp transfer')
+parser = argparse.ArgumentParser(description='ARAE for PAN transfer')
 # Path Arguments
 parser.add_argument('--data_path', type=str, required=True,
                     help='location of the data corpus')
-parser.add_argument('--outf', type=str, default='yelp_example',
+parser.add_argument('--outf', type=str, default='pan_example',
                     help='output directory name')
 parser.add_argument('--load_vocab', type=str, default="",
                     help='path to load vocabulary from')
