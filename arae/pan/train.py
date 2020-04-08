@@ -70,6 +70,8 @@ parser.add_argument('--epochs', type=int, default=25,
                     help='maximum number of epochs')
 parser.add_argument('--batch_size', type=int, default=64, metavar='N',
                     help='batch size')
+parser.add_argument('--eval_batch_size', type=int, default=100, metavar='N',
+                    help='evaluation batch size')                    
 parser.add_argument('--niters_ae', type=int, default=1,
                     help='number of autoencoder iterations in training')
 parser.add_argument('--niters_gan_d', type=int, default=5,
@@ -174,8 +176,10 @@ with open("{}/log.txt".format(args.outf), 'w') as f:
     f.write("\n\n")
 
 eval_batch_size = 100
-test1_data = batchify(corpus.data['valid1'], eval_batch_size, shuffle=False)
-test2_data = batchify(corpus.data['valid2'], eval_batch_size, shuffle=False)
+# test1_data = batchify(corpus.data['valid1'], eval_batch_size, shuffle=False)
+# test2_data = batchify(corpus.data['valid2'], eval_batch_size, shuffle=False)
+test1_data = batchify(corpus.data['valid1'], args.eval_batch_size, shuffle=False)
+test2_data = batchify(corpus.data['valid2'], args.eval_batch_size, shuffle=False)
 train1_data = batchify(corpus.data['train1'], args.batch_size, shuffle=True)
 train2_data = batchify(corpus.data['train2'], args.batch_size, shuffle=True)
 
