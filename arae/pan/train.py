@@ -115,7 +115,6 @@ parser.add_argument('--no-cuda', dest='cuda', action='store_true',
                     help='not using CUDA')
 parser.set_defaults(cuda=True)
 parser.add_argument('--device_id', type=str, default='0')
-parser.add_argument('--test_eval', type=int, default=1000)
 
 args = parser.parse_args()
 print(vars(args))
@@ -640,37 +639,39 @@ for epoch in range(1, args.epochs+1):
 
     # end of epoch ----------------------------
     # evaluation
-    test_loss, accuracy = evaluate_autoencoder(1, test1_data[:args.test_eval], epoch)
-    print('-' * 89)
-    print('| end of epoch {:3d} | time: {:5.2f}s | test loss {:5.2f} | '
-          'test ppl {:5.2f} | acc {:3.3f}'.
-          format(epoch, (time.time() - epoch_start_time),
-                 test_loss, math.exp(test_loss), accuracy))
-    print('-' * 89)
-    with open("{}/log.txt".format(args.outf), 'a') as f:
-        f.write('-' * 89)
-        f.write('\n| end of epoch {:3d} | time: {:5.2f}s | test loss {:5.2f} |'
-                ' test ppl {:5.2f} | acc {:3.3f}\n'.
-                format(epoch, (time.time() - epoch_start_time),
-                       test_loss, math.exp(test_loss), accuracy))
-        f.write('-' * 89)
-        f.write('\n')
+    if len(test1_data) > 1000:
+        test_loss, accuracy = evaluate_autoencoder(1, test1_data[:1000], epoch)
+        print('-' * 89)
+        print('| end of epoch {:3d} | time: {:5.2f}s | test loss {:5.2f} | '
+            'test ppl {:5.2f} | acc {:3.3f}'.
+            format(epoch, (time.time() - epoch_start_time),
+                    test_loss, math.exp(test_loss), accuracy))
+        print('-' * 89)
+        with open("{}/log.txt".format(args.outf), 'a') as f:
+            f.write('-' * 89)
+            f.write('\n| end of epoch {:3d} | time: {:5.2f}s | test loss {:5.2f} |'
+                    ' test ppl {:5.2f} | acc {:3.3f}\n'.
+                    format(epoch, (time.time() - epoch_start_time),
+                        test_loss, math.exp(test_loss), accuracy))
+            f.write('-' * 89)
+            f.write('\n')
     
-    test_loss, accuracy = evaluate_autoencoder(2, test2_data[:args.test_eval], epoch)
-    print('-' * 89)
-    print('| end of epoch {:3d} | time: {:5.2f}s | test loss {:5.2f} | '
-          'test ppl {:5.2f} | acc {:3.3f}'.
-          format(epoch, (time.time() - epoch_start_time),
-                 test_loss, math.exp(test_loss), accuracy))
-    print('-' * 89)
-    with open("{}/log.txt".format(args.outf), 'a') as f:
-        f.write('-' * 89)
-        f.write('\n| end of epoch {:3d} | time: {:5.2f}s | test loss {:5.2f} |'
-                ' test ppl {:5.2f} | acc {:3.3f}\n'.
-                format(epoch, (time.time() - epoch_start_time),
-                       test_loss, math.exp(test_loss), accuracy))
-        f.write('-' * 89)
-        f.write('\n')
+    if len(test2_data) > 1000:
+        test_loss, accuracy = evaluate_autoencoder(2, test2_data[:1000], epoch)
+        print('-' * 89)
+        print('| end of epoch {:3d} | time: {:5.2f}s | test loss {:5.2f} | '
+            'test ppl {:5.2f} | acc {:3.3f}'.
+            format(epoch, (time.time() - epoch_start_time),
+                    test_loss, math.exp(test_loss), accuracy))
+        print('-' * 89)
+        with open("{}/log.txt".format(args.outf), 'a') as f:
+            f.write('-' * 89)
+            f.write('\n| end of epoch {:3d} | time: {:5.2f}s | test loss {:5.2f} |'
+                    ' test ppl {:5.2f} | acc {:3.3f}\n'.
+                    format(epoch, (time.time() - epoch_start_time),
+                        test_loss, math.exp(test_loss), accuracy))
+            f.write('-' * 89)
+            f.write('\n')
 
     evaluate_generator(1, fixed_noise, "end_of_epoch_{}".format(epoch))
     evaluate_generator(2, fixed_noise, "end_of_epoch_{}".format(epoch))
