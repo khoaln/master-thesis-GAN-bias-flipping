@@ -243,6 +243,8 @@ def save_model():
         torch.save(gan_gen.state_dict(), f)
     with open('{}/gan_disc_model.pt'.format(args.outf), 'wb') as f:
         torch.save(gan_disc.state_dict(), f)
+    with open('{}/classifier_model.pt'.format(args.outf), 'wb') as f:
+        torch.save(classifier.state_dict(), f)
 
 
 def train_classifier(whichclass, batch):
@@ -740,3 +742,6 @@ print("Classify loss: {:5.2f} | Classify accuracy: {:3.3f}\n".format(
 with open("{}/log.txt".format(args.outf), 'a') as f:
     f.write("Classify loss: {:5.2f} | Classify accuracy: {:3.3f}\n".format(
                     classify_loss, classify_acc))
+
+print('Saving...')
+save_model()
