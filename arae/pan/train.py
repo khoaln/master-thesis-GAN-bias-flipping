@@ -254,7 +254,7 @@ def train_classifier(whichclass, batch):
     source, target, lengths = batch
     source = to_gpu(args.cuda, Variable(source))
     labels = to_gpu(args.cuda, Variable(torch.zeros(source.size(0)).fill_(whichclass-1)))
-
+    print('labels: {}'.format(labels.data))
     # Train
     code = autoencoder(0, source, lengths, noise=False, encode_only=True).detach()
     scores = classifier(code)
@@ -264,6 +264,7 @@ def train_classifier(whichclass, batch):
     classify_loss = classify_loss.cpu().data[0]
 
     pred = scores.data.round().squeeze(1)
+    print('pred: {}'.format(pres))
     accuracy = pred.eq(labels.data).float().mean()
 
     return classify_loss, accuracy
@@ -724,11 +725,13 @@ with open("{}/log.txt".format(args.outf), 'a') as f:
 
 # test classifier ----------------------------
 classify_loss, classify_acc = 0, 0
+print('len(test1_data): {}'.format(len(test1_data)))
 for niter in range(len(test1_data)):
     classify_loss1, classify_acc1 = train_classifier(1, test1_data[niter])
     classify_loss += classify_loss1
     classify_acc += classify_acc1
 
+print('len(test2_data): {}'.format(len(test2_data)))
 for niter in range(len(test2_data)):
     classify_loss2, classify_acc2 = train_classifier(2, test2_data[niter])
     classify_loss += classify_loss2
