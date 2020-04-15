@@ -254,7 +254,7 @@ def train_classifier(whichclass, batch):
     source, target, lengths = batch
     source = to_gpu(args.cuda, Variable(source))
     labels = to_gpu(args.cuda, Variable(torch.zeros(source.size(0)).fill_(whichclass-1)))
-    print('labels: {}'.format(labels.data))
+
     # Train
     code = autoencoder(0, source, lengths, noise=False, encode_only=True).detach()
     scores = classifier(code)
@@ -264,7 +264,6 @@ def train_classifier(whichclass, batch):
     classify_loss = classify_loss.cpu().data[0]
 
     pred = scores.data.round().squeeze(1)
-    print('pred: {}'.format(pred))
     accuracy = pred.eq(labels.data).float().mean()
 
     return classify_loss, accuracy
