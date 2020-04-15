@@ -121,9 +121,11 @@ for niter in range(len(test_data)):
   scores = classifier(code)
   optimizer_classify.step()
   pred = scores.data.round().squeeze(1)
+  print(f'Pred: {pred}')
   for v in pred:
     predictions.append(v)
 
+print(f'Predictions: {predictions}')
 if len(article_ids) == len(predictions):
   for i in range(len(article_ids)):
     outFile.write(f'{article_ids[i]} {predictions[i]} \n')
