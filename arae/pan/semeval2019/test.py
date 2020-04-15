@@ -61,9 +61,6 @@ classifier.load_state_dict(torch.load(args.model))
 optimizer_classify = optim.Adam(classifier.parameters(),
                                 lr=args.lr_classify,
                                 betas=(args.beta1, 0.999))
-if args.cuda:
-  autoencoder = autoencoder.cuda()
-  classifier = classifier.cuda()
 
 print(classifier)
 vocabdict = None
@@ -81,6 +78,10 @@ autoencoder = Seq2Seq2Decoder(emsize=args.emsize,
                       hidden_init=args.hidden_init,
                       dropout=args.dropout,
                       gpu=args.cuda)
+
+if args.cuda:
+  autoencoder = autoencoder.cuda()
+  classifier = classifier.cuda()
 
 outFile = open(f"{args.outputDir}/{runOutputFileName}", 'w')
 test_data = []
