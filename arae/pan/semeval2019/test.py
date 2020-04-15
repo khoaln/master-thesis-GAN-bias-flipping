@@ -24,9 +24,9 @@ parser.add_argument('--nhidden', type=int, default=128,
 parser.add_argument('--arch_classify', type=str, default='128-128',
                     help='classifier architecture')
 parser.add_argument('--device_id', type=str, default='0')
-parser.add_argument('--maxlen', type=int, default=25    ,
+parser.add_argument('--maxlen', type=int, default=100    ,
                     help='maximum sentence length')
-parser.add_argument('--eval_batch_size', type=int, default=100, metavar='N',
+parser.add_argument('--eval_batch_size', type=int, default=10, metavar='N',
                     help='evaluation batch size')  
 parser.add_argument('--emsize', type=int, default=128,
                     help='size of word embeddings')
