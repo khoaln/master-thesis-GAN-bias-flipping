@@ -137,7 +137,7 @@ def batchify(data, bsz, shuffle=False, gpu=False):
 
     for i in range(nbatch):
         # Pad batches to maximum sequence length in batch
-        batch = data[i*bsz:min((i+1)*bsz, len(data)-1)]
+        batch = data[i*bsz:min((i+1)*bsz, len(data))]
         
         # subtract 1 from lengths b/c includes BOTH starts & end symbols
         words = batch
