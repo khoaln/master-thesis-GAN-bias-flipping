@@ -468,13 +468,13 @@ def calc_gradient_penalty(netD, real_data, fake_data):
     bsz = real_data.size(0)
     alpha = torch.rand(bsz, 1)
     alpha = alpha.expand(bsz, real_data.size(1))  # only works for 2D XXX
-    alpha = alpha.cuda()
+    alpha = to_gpu(args.cuda, alpha)
     interpolates = alpha * real_data + ((1 - alpha) * fake_data)
     interpolates = Variable(interpolates, requires_grad=True)
     disc_interpolates = netD(interpolates)
 
     gradients = torch.autograd.grad(outputs=disc_interpolates, inputs=interpolates,
-                                    grad_outputs=torch.ones(disc_interpolates.size()).cuda(),
+                                    grad_outputs=to_gpu(args.cuda, torch.ones(disc_interpolates.size())),
                                     create_graph=True, retain_graph=True, only_inputs=True)[0]
     gradients = gradients.view(gradients.size(0), -1)
 
