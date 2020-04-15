@@ -62,6 +62,7 @@ optimizer_classify = optim.Adam(classifier.parameters(),
                                 lr=args.lr_classify,
                                 betas=(args.beta1, 0.999))
 if args.cuda:
+  autoencoder = autoencoder.cuda()
   classifier = classifier.cuda()
 
 print(classifier)
