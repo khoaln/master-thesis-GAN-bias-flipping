@@ -16,6 +16,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--model', type=str, help='model')
 parser.add_argument('--inputDataset', type=str, help='input', default='.')
 parser.add_argument('--outputDir', type=str, help='output', default='.')
+parser.add_argument('--vocab', type=str, default="vocab.json",
+                    help='path to load vocabulary from')
 
 parser.add_argument('--nhidden', type=int, default=128,
                     help='number of hidden units per layer')
