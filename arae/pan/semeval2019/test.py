@@ -65,9 +65,10 @@ if args.cuda:
   classifier = classifier.cuda()
 
 print(classifier)
-
-vocabdict = json.load(args.vocab)
-vocabdict = {k: int(v) for k, v in vocabdict.items()}
+vocabdict = None
+with open(args.vocab, 'r') as vocab_file:
+  vocabdict = json.load(vocab_file)
+  vocabdict = {k: int(v) for k, v in vocabdict.items()}
 dictionary = Dictionary(vocabdict)
 
 ntokens = len(dictionary.word2idx)
