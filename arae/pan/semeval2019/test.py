@@ -13,7 +13,7 @@ from utils import to_gpu, batchify, Dictionary
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('--model', type=str, help='model')
+parser.add_argument('--model', type=str, default='classifier_model.pt', help='model')
 parser.add_argument('--inputDataset', type=str, help='input', default='.')
 parser.add_argument('--outputDir', type=str, help='output', default='.')
 parser.add_argument('--vocab', type=str, default="vocab.json",
