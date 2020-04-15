@@ -44,7 +44,7 @@ parser.add_argument('--beta1', type=float, default=0.5,
                     help='beta1 for adam. default=0.5')
 parser.add_argument('--cuda', dest='cuda', action='store_true',
                     help='use CUDA')
-parser.set_defaults(cuda=True)
+parser.set_defaults(cuda=False)
 
 args = parser.parse_args()
 print(vars(args))
