@@ -83,14 +83,14 @@ if args.cuda:
   autoencoder = autoencoder.cuda()
   classifier = classifier.cuda()
 
-outFile = open(f"{args.outputDir}/{runOutputFileName}", 'w')
+outFile = open("{}/{}".format(args.outputDir, runOutputFileName), 'w')
 test_data = []
 dropped = 0
 linecount = 0
 article_ids = []
 for file in os.listdir(args.inputDataset):
   if file.endswith('.xml'):
-    tree = ET.parse(f'{args.inputDataset}/{file}')
+    tree = ET.parse('{}/{}'.format(args.inputDataset, file))
     root = tree.getroot()
     for article in root.findall('article'):
       linecount += 1
@@ -107,8 +107,8 @@ for file in os.listdir(args.inputDataset):
         article_ids.append(article.attrib['id'])
         test_data.append(indices)
 
-print(f"Number of sentences dropped: {dropped} out of {linecount} total")
-print(f'Test set length: {len(test_data)}')
+print("Number of sentences dropped: {} out of {} total".format(dropped, linecount))
+print('Test set length: {}'.format(len(test_data)))
 
 test_data = batchify(test_data, args.eval_batch_size, shuffle=False)
 predictions = []
@@ -127,9 +127,9 @@ for niter in range(len(test_data)):
     else:
       predictions.append('false')
 
-print(f'{len(predictions)}, {len(article_ids)}')
+print('{}, {}'.format(len(predictions), len(article_ids)))
 if len(article_ids) == len(predictions):
   for i in range(len(article_ids)):
-    outFile.write(f'{article_ids[i]} {predictions[i]} \n')
+    outFile.write('{} {} \n'.format(article_ids[i], predictions[i]))
 
 outFile.close()
