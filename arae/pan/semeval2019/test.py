@@ -86,6 +86,7 @@ outFile = open(f"{args.outputDir}/{runOutputFileName}", 'w')
 test_data = []
 dropped = 0
 linecount = 0
+article_ids = []
 for file in os.listdir(args.inputDataset):
   if file.endswith('.xml'):
     tree = ET.parse(f'{args.inputDataset}/{file}')
@@ -102,6 +103,7 @@ for file in os.listdir(args.inputDataset):
         vocab = dictionary.word2idx
         unk_idx = vocab[UNK]
         indices = [vocab[w] if w in vocab else unk_idx for w in words]
+        article_ids.append(article.attrib['id'])
         test_data.append(indices)
 
 print(f"Number of sentences dropped: {dropped} out of {linecount} total")
@@ -121,5 +123,8 @@ for niter in range(len(test_data)):
   for v in pred:
     predictions.append(v)
 
-print(f'Predictions: {predictions}')
+if len(article_ids) == len(predictions):
+  for i in range(len(article_ids)):
+    outFile.write(f'{article_ids[i]} {predictions[i]} \n')
+
 outFile.close()
