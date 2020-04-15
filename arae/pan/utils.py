@@ -2,6 +2,7 @@ import os
 import torch
 import numpy as np
 import random
+import math
 
 PAD_WORD="<pad>"
 EOS_WORD="<eos>"
@@ -131,7 +132,7 @@ def batchify(data, bsz, shuffle=False, gpu=False):
     if shuffle:
         random.shuffle(data)
 
-    nbatch = ceil(len(data) / bsz)
+    nbatch = math.ceil(len(data) / bsz)
     batches = []
 
     for i in range(nbatch):
