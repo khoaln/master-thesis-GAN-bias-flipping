@@ -115,7 +115,7 @@ parser.add_argument('--cuda', dest='cuda', action='store_true',
                     help='use CUDA')
 parser.add_argument('--no-cuda', dest='cuda', action='store_true',
                     help='not using CUDA')
-parser.set_defaults(cuda=True)
+# parser.set_defaults(cuda=True)
 parser.add_argument('--device_id', type=str, default='0')
 
 args = parser.parse_args()
