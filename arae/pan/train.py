@@ -502,7 +502,7 @@ def train_gan_d(whichdecoder, batch):
     # negative samples ----------------------------
     # generate fake codes
     noise = to_gpu(args.cuda,
-                   Variable(torch.ones(args.batch_size, args.z_size)))
+                   Variable(torch.ones(min(args.batch_size, real_hidden.size(0)), args.z_size)))
     noise.data.normal_(0, 1)
 
     # loss / backprop
