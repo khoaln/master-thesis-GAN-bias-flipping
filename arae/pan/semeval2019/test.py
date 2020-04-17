@@ -13,7 +13,8 @@ from utils import to_gpu, batchify, Dictionary
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('--model', type=str, default='classifier_model.pt', help='model')
+parser.add_argument('--model', type=str, default='classifier_model.pt', help='classifier model')
+parser.add_argument('--autoencoder_model', type=str, default='autoencoder_model.pt', help='autoencoder_model model')
 parser.add_argument('--inputDataset', type=str, help='input', default='.')
 parser.add_argument('--outputDir', type=str, help='output', default='.')
 parser.add_argument('--vocab', type=str, default="vocab.json",
@@ -77,7 +78,7 @@ autoencoder = Seq2Seq2Decoder(emsize=args.emsize,
                       hidden_init=args.hidden_init,
                       dropout=args.dropout,
                       gpu=args.cuda)
-
+autoencoder.load_state_dict(torch.load(args.autoencoder_model))
 if args.cuda:
   autoencoder = autoencoder.cuda()
   classifier = classifier.cuda()
