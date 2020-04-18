@@ -113,13 +113,13 @@ print('Test set length: {}'.format(len(test_data)))
 test_data = batchify(test_data, args.eval_batch_size, shuffle=False)
 predictions = []
 for niter in range(len(test_data)):
-  classifier.train()
-  classifier.zero_grad()
+  # classifier.train()
+  # classifier.zero_grad()
   source, target, lengths = test_data[niter]
   source = to_gpu(args.cuda, Variable(source))
   code = autoencoder(0, source, lengths, noise=False, encode_only=True).detach()
   scores = classifier(code)
-  optimizer_classify.step()
+  # optimizer_classify.step()
   pred = scores.data.round().squeeze(1)
   for v in pred:
     if v == 0:
