@@ -7,6 +7,7 @@ import xml.etree.ElementTree as ET
 import nltk
 import re
 import json
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 
 from models import MLP_Classify, Seq2Seq2Decoder
 from utils import to_gpu, batchify, Dictionary
@@ -19,6 +20,7 @@ parser.add_argument('--inputDataset', type=str, help='input', default='.')
 parser.add_argument('--outputDir', type=str, help='output', default='.')
 parser.add_argument('--vocab', type=str, default="vocab.json",
                     help='path to load vocabulary from')
+parser.add_argument('--ground_truth', type=str, default='')
 
 parser.add_argument('--nhidden', type=int, default=128,
                     help='number of hidden units per layer')
@@ -83,11 +85,20 @@ if args.cuda:
   autoencoder = autoencoder.cuda()
   classifier = classifier.cuda()
 
+ground_truth = {}
+if args.ground_truth:
+  gt_tree = ET.parse(args.ground_truth)
+  gt_root = gt_tree.getroot()
+
+  for child in gt_root:
+      ground_truth[child.attrib['id']] = child.attrib['hyperpartisan']
+
 outFile = open("{}/{}".format(args.outputDir, runOutputFileName), 'w')
 test_data = []
 dropped = 0
 linecount = 0
 article_ids = []
+labels = []
 for file in os.listdir(args.inputDataset):
   if file.endswith('.xml'):
     tree = ET.parse('{}/{}'.format(args.inputDataset, file))
@@ -106,6 +117,10 @@ for file in os.listdir(args.inputDataset):
         indices = [vocab[w] if w in vocab else unk_idx for w in words]
         article_ids.append(article.attrib['id'])
         test_data.append(indices)
+        if article.attrib['id'] in ground_truth:
+          labels.append(ground_truth[article.attrib['id']])
+        else:
+          labels.append('false')
 
 print("Number of sentences dropped: {} out of {} total".format(dropped, linecount))
 print('Test set length: {}'.format(len(test_data)))
@@ -127,9 +142,12 @@ for niter in range(len(test_data)):
     else:
       predictions.append('true')
 
-print('{}, {}'.format(len(predictions), len(article_ids)))
+print('{}, {}, {}'.format(len(predictions), len(article_ids), len(labels)))
 if len(article_ids) == len(predictions):
   for i in range(len(article_ids)):
     outFile.write('{} {} \n'.format(article_ids[i], predictions[i]))
 
 outFile.close()
+
+print('Accuracy: {}'.format(accuracy_score(labels, predictions)))
+print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels, predictions, average='micro')))
