@@ -59,7 +59,7 @@ BOS_WORD="<bos>"
 UNK="<unk>"
 
 classifier = MLP_Classify(ninput=args.nhidden, noutput=1, layers=args.arch_classify)
-classifier.load_state_dict(torch.load(args.model))
+classifier.load_state_dict(torch.load(args.model, map_location=lambda storage, loc: storage))
 optimizer_classify = optim.Adam(classifier.parameters(),
                                 lr=args.lr_classify,
                                 betas=(args.beta1, 0.999))
@@ -80,7 +80,7 @@ autoencoder = Seq2Seq2Decoder(emsize=args.emsize,
                       hidden_init=args.hidden_init,
                       dropout=args.dropout,
                       gpu=args.cuda)
-autoencoder.load_state_dict(torch.load(args.autoencoder_model))
+autoencoder.load_state_dict(torch.load(args.autoencoder_model, map_location=lambda storage, loc: storage))
 if args.cuda:
   autoencoder = autoencoder.cuda()
   classifier = classifier.cuda()
