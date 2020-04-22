@@ -123,9 +123,9 @@ for niter in range(len(test_data)):
   pred = scores.data.round().squeeze(1)
   for v in pred:
     if v == 0:
-      predictions.append('true')
-    else:
       predictions.append('false')
+    else:
+      predictions.append('true')
 
 print('{}, {}'.format(len(predictions), len(article_ids)))
 if len(article_ids) == len(predictions):
