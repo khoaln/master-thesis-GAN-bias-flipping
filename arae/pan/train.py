@@ -197,6 +197,7 @@ print("Loaded data!")
 ###############################################################################
 
 ntokens = len(corpus.dictionary.word2idx)
+corpus.dictionary.weights_matrix = to_gpu(args.cuda, corpus.dictionary.weights_matrix)
 autoencoder = Seq2Seq2Decoder(emsize=args.emsize,
                       nhidden=args.nhidden,
                       ntokens=ntokens,

@@ -101,6 +101,8 @@ class Glove_Dictionary(Dictionary):
             except KeyError:
                 self.weights_matrix[i] = np.random.normal(scale=0.6, size=(emsize, ))
 
+        self.weights_matrix = torch.from_numpy(self.weights_matrix).float()
+
 class Corpus(object):
     def __init__(self, datafiles, maxlen, vocab_size=11000, lowercase=False, vocab=None, debug=False,
             glove_vectors_file='', glove_words_file='', glove_word2idx_file='', emsize=128):
