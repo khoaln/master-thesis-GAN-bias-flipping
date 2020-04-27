@@ -165,7 +165,8 @@ corpus = Corpus(datafiles,
                 vocab=vocabdict,
                 glove_vectors_file=args.glove_vectors_file, 
                 glove_words_file=args.glove_words_file, 
-                glove_word2idx_file=args.glove_word2idx_file)
+                glove_word2idx_file=args.glove_word2idx_file,
+                emsize=args.emsize)
 
 # dumping vocabulary
 with open('{}/vocab.json'.format(args.outf), 'w') as f:

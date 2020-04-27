@@ -103,7 +103,7 @@ class Glove_Dictionary(Dictionary):
 
 class Corpus(object):
     def __init__(self, datafiles, maxlen, vocab_size=11000, lowercase=False, vocab=None, debug=False,
-            glove_vectors_file='', glove_words_file='', glove_word2idx_file=''):
+            glove_vectors_file='', glove_words_file='', glove_word2idx_file='', emsize=128):
         self.dictionary = Glove_Dictionary(vocab, glove_vectors_file, glove_words_file, glove_word2idx_file)
         self.maxlen = maxlen
         self.lowercase = lowercase
@@ -111,6 +111,7 @@ class Corpus(object):
         self.datafiles = datafiles
         self.forvocab = []
         self.data = {}
+        self.emsize = emsize
 
         if vocab is None:
             for path, name, fvocab in datafiles:
@@ -134,7 +135,7 @@ class Corpus(object):
                         self.dictionary.add_word(word)
 
         # prune the vocabulary
-        self.dictionary.prune_vocab(k=self.vocab_size, cnt=False)
+        self.dictionary.prune_vocab(k=self.vocab_size, cnt=False, self.emsize)
 
     def tokenize(self, path):
         """Tokenizes a text file."""
