@@ -80,9 +80,9 @@ class Seq2Seq2Decoder(nn.Module):
             self.embedding.load_state_dict({'weight': weights_matrix})
             self.embedding_decoder1.load_state_dict({'weight': weights_matrix})
             self.embedding_decoder2.load_state_dict({'weight': weights_matrix})
-            self.embedding.weight.requires_grad = False
-            self.embedding_decoder1.weight.requires_grad = False
-            self.embedding_decoder2.weight.requires_grad = False
+            self.embedding.weight.requires_grad = True
+            self.embedding_decoder1.weight.requires_grad = True
+            self.embedding_decoder2.weight.requires_grad = True
 
         # RNN Encoder and Decoder
         self.encoder = nn.LSTM(input_size=emsize,
@@ -387,9 +387,9 @@ class Seq2Seq(nn.Module):
             self.embedding.load_state_dict({'weight': weights_matrix})
             self.embedding_decoder1.load_state_dict({'weight': weights_matrix})
             self.embedding_decoder2.load_state_dict({'weight': weights_matrix})
-            self.embedding.weight.requires_grad = False
-            self.embedding_decoder1.weight.requires_grad = False
-            self.embedding_decoder2.weight.requires_grad = False
+            self.embedding.weight.requires_grad = True
+            self.embedding_decoder1.weight.requires_grad = True
+            self.embedding_decoder2.weight.requires_grad = True
 
         # RNN Encoder and Decoder
         self.encoder = nn.LSTM(input_size=emsize,
