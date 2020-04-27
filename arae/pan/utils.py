@@ -95,7 +95,7 @@ class Glove_Dictionary(Dictionary):
     def prune_vocab(self, k=5, cnt=False, emsize=128):
         super(Glove_Dictionary, self).prune_vocab(k=k, cnt=cnt)
         self.weights_matrix = np.zeros((len(self.word2idx), emsize))
-        for word, i in self.word2idx:
+        for word, i in self.word2idx.items():
             try:
                 self.weights_matrix[i] = self.glove[word]
             except KeyError:
