@@ -102,8 +102,9 @@ class Glove_Dictionary(Dictionary):
                 self.weights_matrix[i] = np.random.normal(scale=0.6, size=(emsize, ))
 
 class Corpus(object):
-    def __init__(self, datafiles, maxlen, vocab_size=11000, lowercase=False, vocab=None, debug=False):
-        self.dictionary = Glove_Dictionary(vocab)
+    def __init__(self, datafiles, maxlen, vocab_size=11000, lowercase=False, vocab=None, debug=False,
+            glove_vectors_file='', glove_words_file='', glove_word2idx_file=''):
+        self.dictionary = Glove_Dictionary(vocab, glove_vectors_file, glove_words_file, glove_word2idx_file)
         self.maxlen = maxlen
         self.lowercase = lowercase
         self.vocab_size = vocab_size

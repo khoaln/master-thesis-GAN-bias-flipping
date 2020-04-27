@@ -25,6 +25,9 @@ parser.add_argument('--outf', type=str, default='pan_example',
                     help='output directory name')
 parser.add_argument('--load_vocab', type=str, default="",
                     help='path to load vocabulary from')
+parser.add_argument('--glove_vectors_file', type=str)
+parser.add_argument('--glove_words_file', type=str)
+parser.add_argument('--glove_word2idx_file', type=str)               
 
 # Data Processing Arguments
 parser.add_argument('--vocab_size', type=int, default=30000,
@@ -159,7 +162,10 @@ corpus = Corpus(datafiles,
                 maxlen=args.maxlen,
                 vocab_size=args.vocab_size,
                 lowercase=args.lowercase,
-                vocab=vocabdict)
+                vocab=vocabdict,
+                glove_vectors_file=args.glove_vectors_file, 
+                glove_words_file=args.glove_words_file, 
+                glove_word2idx_file=args.glove_word2idx_file)
 
 # dumping vocabulary
 with open('{}/vocab.json'.format(args.outf), 'w') as f:
