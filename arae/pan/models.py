@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from torch.autograd import Variable
 from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
 
-from utils import to_gpu
+from utils import to_gpu, Glove_Dictionary
 import json
 import os
 import numpy as np
@@ -58,7 +58,7 @@ class MLP_Classify(nn.Module):
 
 class Seq2Seq2Decoder(nn.Module):
     def __init__(self, emsize, nhidden, ntokens, nlayers, noise_r=0.2,
-                 share_decoder_emb=False, hidden_init=False, dropout=0, gpu=False):
+                 share_decoder_emb=False, hidden_init=False, dropout=0, gpu=False, weights_matrix=None):
         super(Seq2Seq2Decoder, self).__init__()
         self.nhidden = nhidden
         self.emsize = emsize
@@ -75,6 +75,14 @@ class Seq2Seq2Decoder(nn.Module):
         self.embedding = nn.Embedding(ntokens, emsize)
         self.embedding_decoder1 = nn.Embedding(ntokens, emsize)
         self.embedding_decoder2 = nn.Embedding(ntokens, emsize)
+
+        if weights_matrix is not None:
+            self.embedding.load_state_dict({'weight': weights_matrix})
+            self.embedding_decoder1.load_state_dict({'weight': weights_matrix})
+            self.embedding_decoder2.load_state_dict({'weight': weights_matrix})
+            self.embedding.weight.requires_grad = False
+            self.embedding_decoder1.weight.requires_grad = False
+            self.embedding_decoder2.weight.requires_grad = False
 
         # RNN Encoder and Decoder
         self.encoder = nn.LSTM(input_size=emsize,
@@ -358,7 +366,7 @@ class MLP_G(nn.Module):
 
 class Seq2Seq(nn.Module):
     def __init__(self, emsize, nhidden, ntokens, nlayers, noise_r=0.2,
-                 hidden_init=False, dropout=0, gpu=False):
+                 hidden_init=False, dropout=0, gpu=False, weights_matrix=None):
         super(Seq2Seq, self).__init__()
         self.nhidden = nhidden
         self.emsize = emsize
@@ -374,6 +382,14 @@ class Seq2Seq(nn.Module):
         # Vocabulary embedding
         self.embedding = nn.Embedding(ntokens, emsize)
         self.embedding_decoder = nn.Embedding(ntokens, emsize)
+
+        if dict is not None:
+            self.embedding.load_state_dict({'weight': weights_matrix})
+            self.embedding_decoder1.load_state_dict({'weight': weights_matrix})
+            self.embedding_decoder2.load_state_dict({'weight': weights_matrix})
+            self.embedding.weight.requires_grad = False
+            self.embedding_decoder1.weight.requires_grad = False
+            self.embedding_decoder2.weight.requires_grad = False
 
         # RNN Encoder and Decoder
         self.encoder = nn.LSTM(input_size=emsize,

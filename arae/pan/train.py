@@ -197,7 +197,8 @@ autoencoder = Seq2Seq2Decoder(emsize=args.emsize,
                       noise_r=args.noise_r,
                       hidden_init=args.hidden_init,
                       dropout=args.dropout,
-                      gpu=args.cuda)
+                      gpu=args.cuda,
+                      weights_matrix=corpus.dictionary.weights_matrix)
 
 gan_gen = MLP_G(ninput=args.z_size, noutput=args.nhidden, layers=args.arch_g)
 gan_disc = MLP_D(ninput=args.nhidden, noutput=1, layers=args.arch_d)

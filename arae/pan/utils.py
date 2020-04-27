@@ -3,6 +3,8 @@ import torch
 import numpy as np
 import random
 import math
+import bcolz
+import pickle
 
 PAD_WORD="<pad>"
 EOS_WORD="<eos>"
@@ -68,10 +70,40 @@ class Dictionary(object):
     def __len__(self):
         return len(self.word2idx)
 
+class Glove_Dictionary(Dictionary):
+    def __init__(self, word2idx=None, glove_vectors_file='', glove_words_file='', glove_word2idx_file=''):
+        if word2idx is None:
+            self.word2idx = {}
+            self.idx2word = {}
+            self.weights_matrix = []
+
+            self.glove_vectors = bcolz.open(glove_vectors_file)[:]
+            self.glove_words = pickle.load(glove_words_file, 'rb')
+            self.glove_word2idx = pickle.load(glove_word2idx_file, 'rb')
+
+            self.glove = {w: self.glove_vectors[self.glove_word2idx[w]] for w in self.glove_words}
+
+            self.word2idx[PAD_WORD] = 0
+            self.word2idx[BOS_WORD] = 1
+            self.word2idx[EOS_WORD] = 2
+            self.word2idx[UNK] = 3
+            self.wordcounts = {}
+        else:
+            self.word2idx = word2idx
+            self.idx2word = {v: k for k, v in word2idx.items()}
+    
+    def prune_vocab(self, k=5, cnt=False, emsize=128):
+        super(Glove_Dictionary, self).prune_vocab(k=k, cnt=cnt)
+        self.weights_matrix = np.zeros((len(self.word2idx), emsize))
+        for word, i in self.word2idx:
+            try:
+                self.weights_matrix[i] = self.glove[word]
+            except KeyError:
+                self.weights_matrix[i] = np.random.normal(scale=0.6, size=(emsize, ))
 
 class Corpus(object):
     def __init__(self, datafiles, maxlen, vocab_size=11000, lowercase=False, vocab=None, debug=False):
-        self.dictionary = Dictionary(vocab)
+        self.dictionary = Glove_Dictionary(vocab)
         self.maxlen = maxlen
         self.lowercase = lowercase
         self.vocab_size = vocab_size
