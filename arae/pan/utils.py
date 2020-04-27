@@ -135,7 +135,7 @@ class Corpus(object):
                         self.dictionary.add_word(word)
 
         # prune the vocabulary
-        self.dictionary.prune_vocab(k=self.vocab_size, cnt=False, self.emsize)
+        self.dictionary.prune_vocab(k=self.vocab_size, cnt=False, emsize=self.emsize)
 
     def tokenize(self, path):
         """Tokenizes a text file."""
