@@ -8,6 +8,7 @@ import nltk
 import re
 import json
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+import numpy as np
 
 from models import MLP_Classify, Seq2Seq2Decoder
 from utils import to_gpu, batchify, Glove_Dictionary
@@ -77,7 +78,16 @@ dictionary = Glove_Dictionary(vocabdict,
                 glove_words_file=args.glove_words_file, 
                 glove_word2idx_file=args.glove_word2idx_file)
 
-dictionary.weights_matrix = to_gpu(args.cuda, dictionary.weights_matrix)
+weights_matrix = np.zeros((len(dictionary.word2idx), args.emsize))
+for word, i in dictionary.word2idx.items():
+  try:
+    weights_matrix[i] = dictionary.glove[word]
+  except KeyError:
+    weights_matrix[i] = np.random.normal(scale=0.6, size=(args.emsize, ))
+
+weights_matrix = torch.from_numpy(weights_matrix).float()
+weights_matrix = to_gpu(args.cuda, weights_matrix)
+
 ntokens = len(dictionary.word2idx)
 autoencoder = Seq2Seq2Decoder(emsize=args.emsize,
                       nhidden=args.nhidden,
@@ -87,7 +97,7 @@ autoencoder = Seq2Seq2Decoder(emsize=args.emsize,
                       hidden_init=args.hidden_init,
                       dropout=args.dropout,
                       gpu=args.cuda,
-                      weights_matrix=dictionary.weights_matrix)
+                      weights_matrix=weights_matrix)
 autoencoder.load_state_dict(torch.load(args.autoencoder_model, map_location=lambda storage, loc: storage))
 if args.cuda:
   autoencoder = autoencoder.cuda()
