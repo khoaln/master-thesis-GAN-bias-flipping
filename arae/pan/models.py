@@ -115,9 +115,9 @@ class Seq2Seq2Decoder(nn.Module):
         initrange = 0.1
 
         # Initialize Vocabulary Matrix Weight
-        self.embedding.weight.data.uniform_(-initrange, initrange)
-        self.embedding_decoder1.weight.data.uniform_(-initrange, initrange)
-        self.embedding_decoder2.weight.data.uniform_(-initrange, initrange)
+        # self.embedding.weight.data.uniform_(-initrange, initrange)
+        # self.embedding_decoder1.weight.data.uniform_(-initrange, initrange)
+        # self.embedding_decoder2.weight.data.uniform_(-initrange, initrange)
 
         # Initialize Encoder and Decoder Weights
         for p in self.encoder.parameters():
@@ -414,8 +414,8 @@ class Seq2Seq(nn.Module):
         initrange = 0.1
 
         # Initialize Vocabulary Matrix Weight
-        self.embedding.weight.data.uniform_(-initrange, initrange)
-        self.embedding_decoder.weight.data.uniform_(-initrange, initrange)
+        # self.embedding.weight.data.uniform_(-initrange, initrange)
+        # self.embedding_decoder.weight.data.uniform_(-initrange, initrange)
 
         # Initialize Encoder and Decoder Weights
         for p in self.encoder.parameters():
