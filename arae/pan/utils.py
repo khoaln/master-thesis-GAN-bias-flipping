@@ -75,7 +75,6 @@ class Glove_Dictionary(Dictionary):
         if word2idx is None:
             self.word2idx = {}
             self.idx2word = {}
-            self.weights_matrix = []
 
             self.word2idx[PAD_WORD] = 0
             self.word2idx[BOS_WORD] = 1
@@ -86,6 +85,7 @@ class Glove_Dictionary(Dictionary):
             self.word2idx = word2idx
             self.idx2word = {v: k for k, v in word2idx.items()}
 
+        self.weights_matrix = []
         self.glove_vectors = bcolz.open(glove_vectors_file)[:]
         self.glove_words = pickle.load(open(glove_words_file, 'rb'))
         self.glove_word2idx = pickle.load(open(glove_word2idx_file, 'rb'))
