@@ -10,7 +10,7 @@ import json
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 
 from models import MLP_Classify, Seq2Seq2Decoder
-from utils import to_gpu, batchify, Dictionary
+from utils import to_gpu, batchify, Glove_Dictionary
 
 parser = argparse.ArgumentParser()
 
@@ -47,6 +47,9 @@ parser.add_argument('--beta1', type=float, default=0.5,
                     help='beta1 for adam. default=0.5')
 parser.add_argument('--cuda', dest='cuda', action='store_true',
                     help='use CUDA')
+parser.add_argument('--glove_vectors_file', type=str)
+parser.add_argument('--glove_words_file', type=str)
+parser.add_argument('--glove_word2idx_file', type=str)  
 
 args = parser.parse_args()
 print(vars(args))
@@ -69,8 +72,12 @@ vocabdict = None
 with open(args.vocab, 'r') as vocab_file:
   vocabdict = json.load(vocab_file)
   vocabdict = {k: int(v) for k, v in vocabdict.items()}
-dictionary = Dictionary(vocabdict)
+dictionary = Glove_Dictionary(vocabdict,
+                glove_vectors_file=args.glove_vectors_file, 
+                glove_words_file=args.glove_words_file, 
+                glove_word2idx_file=args.glove_word2idx_file)
 
+dictionary.weights_matrix = to_gpu(args.cuda, dictionary.weights_matrix)
 ntokens = len(dictionary.word2idx)
 autoencoder = Seq2Seq2Decoder(emsize=args.emsize,
                       nhidden=args.nhidden,
@@ -79,7 +86,8 @@ autoencoder = Seq2Seq2Decoder(emsize=args.emsize,
                       noise_r=args.noise_r,
                       hidden_init=args.hidden_init,
                       dropout=args.dropout,
-                      gpu=args.cuda)
+                      gpu=args.cuda,
+                      weights_matrix=dictionary.weights_matrix)
 autoencoder.load_state_dict(torch.load(args.autoencoder_model, map_location=lambda storage, loc: storage))
 if args.cuda:
   autoencoder = autoencoder.cuda()

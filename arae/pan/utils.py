@@ -77,12 +77,6 @@ class Glove_Dictionary(Dictionary):
             self.idx2word = {}
             self.weights_matrix = []
 
-            self.glove_vectors = bcolz.open(glove_vectors_file)[:]
-            self.glove_words = pickle.load(open(glove_words_file, 'rb'))
-            self.glove_word2idx = pickle.load(open(glove_word2idx_file, 'rb'))
-
-            self.glove = {w: self.glove_vectors[self.glove_word2idx[w]] for w in self.glove_words}
-
             self.word2idx[PAD_WORD] = 0
             self.word2idx[BOS_WORD] = 1
             self.word2idx[EOS_WORD] = 2
@@ -91,6 +85,12 @@ class Glove_Dictionary(Dictionary):
         else:
             self.word2idx = word2idx
             self.idx2word = {v: k for k, v in word2idx.items()}
+
+        self.glove_vectors = bcolz.open(glove_vectors_file)[:]
+        self.glove_words = pickle.load(open(glove_words_file, 'rb'))
+        self.glove_word2idx = pickle.load(open(glove_word2idx_file, 'rb'))
+
+        self.glove = {w: self.glove_vectors[self.glove_word2idx[w]] for w in self.glove_words}
     
     def prune_vocab(self, k=5, cnt=False, emsize=128):
         super(Glove_Dictionary, self).prune_vocab(k=k, cnt=cnt)
