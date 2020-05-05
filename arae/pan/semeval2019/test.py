@@ -163,6 +163,12 @@ for file in os.listdir(args.inputDataset):
           test2_data.append(indices)
           labels.append('false')
 
+print("Number of sentences dropped: {} out of {} total".format(dropped, linecount))
+print('Test set length: {}'.format(len(test1_data)))
+print('Test set length: {}'.format(len(test2_data)))
+
+test1_data = batchify(test1_data, args.eval_batch_size, shuffle=False)
+test2_data = batchify(test2_data, args.eval_batch_size, shuffle=False)
 
 # test classifier ----------------------------
 classify_loss, classify_acc = 0, 0
@@ -182,12 +188,7 @@ classify_loss = classify_loss / (len(test1_data) + len(test2_data))
 classify_acc = classify_acc / (len(test1_data) + len(test2_data))
 print("Classify loss: {:5.2f} | Classify accuracy: {:3.3f}\n".format(
                     classify_loss, classify_acc))
-                    
-# print("Number of sentences dropped: {} out of {} total".format(dropped, linecount))
-# print('Test set length: {}'.format(len(test_data)))
 
-# test1_data = batchify(test1_data, args.eval_batch_size, shuffle=False)
-# test2_data = batchify(test2_data, args.eval_batch_size, shuffle=False)
 # predictions = []
 # for niter in range(len(test_data)):
 #   # classifier.train()
