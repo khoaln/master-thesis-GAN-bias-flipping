@@ -52,6 +52,27 @@ parser.add_argument('--glove_vectors_file', type=str)
 parser.add_argument('--glove_words_file', type=str)
 parser.add_argument('--glove_word2idx_file', type=str)  
 
+def train_classifier(whichclass, batch):
+  classifier.train()
+  classifier.zero_grad()
+
+  source, target, lengths = batch
+  source = to_gpu(args.cuda, Variable(source))
+  labels = to_gpu(args.cuda, Variable(torch.zeros(source.size(0)).fill_(whichclass-1)))
+
+  # Train
+  code = autoencoder(0, source, lengths, noise=False, encode_only=True).detach()
+  scores = classifier(code)
+  classify_loss = F.binary_cross_entropy(scores.squeeze(1), labels)
+  classify_loss.backward()
+  optimizer_classify.step()
+  classify_loss = classify_loss.cpu().data[0]
+
+  pred = scores.data.round().squeeze(1)
+  accuracy = pred.eq(labels.data).float().mean()
+
+  return classify_loss, accuracy
+
 args = parser.parse_args()
 print(vars(args))
 
@@ -112,7 +133,8 @@ if args.ground_truth:
       ground_truth[child.attrib['id']] = child.attrib['hyperpartisan']
 
 outFile = open("{}/{}".format(args.outputDir, runOutputFileName), 'w')
-test_data = []
+test1_data = []
+test2_data = []
 dropped = 0
 linecount = 0
 article_ids = []
@@ -134,38 +156,60 @@ for file in os.listdir(args.inputDataset):
         unk_idx = vocab[UNK]
         indices = [vocab[w] if w in vocab else unk_idx for w in words]
         article_ids.append(article.attrib['id'])
-        test_data.append(indices)
         if article.attrib['id'] in ground_truth:
+          test1_data.append(indices)
           labels.append(ground_truth[article.attrib['id']])
         else:
+          test2_data.append(indices)
           labels.append('false')
 
-print("Number of sentences dropped: {} out of {} total".format(dropped, linecount))
-print('Test set length: {}'.format(len(test_data)))
 
-test_data = batchify(test_data, args.eval_batch_size, shuffle=False)
-predictions = []
-for niter in range(len(test_data)):
-  # classifier.train()
-  # classifier.zero_grad()
-  source, target, lengths = test_data[niter]
-  source = to_gpu(args.cuda, Variable(source))
-  code = autoencoder(0, source, lengths, noise=False, encode_only=True).detach()
-  scores = classifier(code)
-  # optimizer_classify.step()
-  pred = scores.data.round().squeeze(1)
-  for v in pred:
-    if v == 0:
-      predictions.append('true')
-    else:
-      predictions.append('false')
+# test classifier ----------------------------
+classify_loss, classify_acc = 0, 0
+print('len(test1_data): {}'.format(len(test1_data)))
+for niter in range(len(test1_data)):
+    classify_loss1, classify_acc1 = train_classifier(1, test1_data[niter])
+    classify_loss += classify_loss1
+    classify_acc += classify_acc1
 
-print('{}, {}, {}'.format(len(predictions), len(article_ids), len(labels)))
-if len(article_ids) == len(predictions):
-  for i in range(len(article_ids)):
-    outFile.write('{} {} {} \n'.format(article_ids[i], predictions[i], labels[i]))
+print('len(test2_data): {}'.format(len(test2_data)))
+for niter in range(len(test2_data)):
+    classify_loss2, classify_acc2 = train_classifier(2, test2_data[niter])
+    classify_loss += classify_loss2
+    classify_acc += classify_acc2
 
-outFile.close()
+classify_loss = classify_loss / (len(test1_data) + len(test2_data))
+classify_acc = classify_acc / (len(test1_data) + len(test2_data))
+print("Classify loss: {:5.2f} | Classify accuracy: {:3.3f}\n".format(
+                    classify_loss, classify_acc))
+                    
+# print("Number of sentences dropped: {} out of {} total".format(dropped, linecount))
+# print('Test set length: {}'.format(len(test_data)))
 
-print('Accuracy: {}'.format(accuracy_score(labels, predictions)))
-print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels, predictions, average='micro')))
+# test1_data = batchify(test1_data, args.eval_batch_size, shuffle=False)
+# test2_data = batchify(test2_data, args.eval_batch_size, shuffle=False)
+# predictions = []
+# for niter in range(len(test_data)):
+#   # classifier.train()
+#   # classifier.zero_grad()
+#   source, target, lengths = test_data[niter]
+#   source = to_gpu(args.cuda, Variable(source))
+#   code = autoencoder(0, source, lengths, noise=False, encode_only=True).detach()
+#   scores = classifier(code)
+#   # optimizer_classify.step()
+#   pred = scores.data.round().squeeze(1)
+#   for v in pred:
+#     if v == 0:
+#       predictions.append('true')
+#     else:
+#       predictions.append('false')
+
+# print('{}, {}, {}'.format(len(predictions), len(article_ids), len(labels)))
+# if len(article_ids) == len(predictions):
+#   for i in range(len(article_ids)):
+#     outFile.write('{} {} {} \n'.format(article_ids[i], predictions[i], labels[i]))
+
+# outFile.close()
+
+# print('Accuracy: {}'.format(accuracy_score(labels, predictions)))
+# print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels, predictions, average='micro')))
