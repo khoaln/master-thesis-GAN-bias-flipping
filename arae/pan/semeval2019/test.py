@@ -156,9 +156,9 @@ for niter in range(len(test_data)):
   pred = scores.data.round().squeeze(1)
   for v in pred:
     if v == 0:
-      predictions.append('false')
-    else:
       predictions.append('true')
+    else:
+      predictions.append('false')
 
 print('{}, {}, {}'.format(len(predictions), len(article_ids), len(labels)))
 if len(article_ids) == len(predictions):
@@ -168,4 +168,4 @@ if len(article_ids) == len(predictions):
 outFile.close()
 
 print('Accuracy: {}'.format(accuracy_score(labels, predictions)))
-print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels, predictions, average='micro')))
+print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels, predictions, average='macro')))
