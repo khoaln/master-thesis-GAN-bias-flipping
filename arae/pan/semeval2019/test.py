@@ -2,6 +2,7 @@ import argparse
 import torch
 from torch.autograd import Variable
 import torch.optim as optim
+import torch.nn.functional as F
 import os
 import xml.etree.ElementTree as ET
 import nltk
