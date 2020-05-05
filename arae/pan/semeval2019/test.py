@@ -163,9 +163,9 @@ for niter in range(len(test_data)):
 print('{}, {}, {}'.format(len(predictions), len(article_ids), len(labels)))
 if len(article_ids) == len(predictions):
   for i in range(len(article_ids)):
-    outFile.write('{} {} \n'.format(article_ids[i], predictions[i]))
+    outFile.write('{} {} {} \n'.format(article_ids[i], predictions[i], labels[i]))
 
 outFile.close()
 
 print('Accuracy: {}'.format(accuracy_score(labels, predictions)))
-print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels, predictions, average='macro')))
+print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels, predictions, average='micro')))
