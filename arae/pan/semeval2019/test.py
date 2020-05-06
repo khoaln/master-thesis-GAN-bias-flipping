@@ -54,8 +54,8 @@ parser.add_argument('--glove_words_file', type=str)
 parser.add_argument('--glove_word2idx_file', type=str)  
 
 def train_classifier(whichclass, batch):
-  classifier.train()
-  classifier.zero_grad()
+  # classifier.train()
+  # classifier.zero_grad()
 
   source, target, lengths = batch
   source = to_gpu(args.cuda, Variable(source))
@@ -65,8 +65,8 @@ def train_classifier(whichclass, batch):
   code = autoencoder(0, source, lengths, noise=False, encode_only=True).detach()
   scores = classifier(code)
   classify_loss = F.binary_cross_entropy(scores.squeeze(1), labels)
-  classify_loss.backward()
-  optimizer_classify.step()
+  # classify_loss.backward()
+  # optimizer_classify.step()
   classify_loss = classify_loss.cpu().data[0]
 
   pred = scores.data.round().squeeze(1)
