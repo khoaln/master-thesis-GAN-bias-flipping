@@ -698,7 +698,9 @@ for epoch in range(1, args.epochs+1):
     train1_data = batchify(corpus.data['train1'], args.batch_size, shuffle=True)
     train2_data = batchify(corpus.data['train2'], args.batch_size, shuffle=True)
     
-    
+print('Saving...')
+save_model()
+
 test_loss, accuracy = evaluate_autoencoder(1, test1_data, epoch+1)
 print('-' * 89)
 print('| end of epoch {:3d} | time: {:5.2f}s | test loss {:5.2f} | '
@@ -753,6 +755,3 @@ print("Classify loss: {:5.2f} | Classify accuracy: {:3.3f}\n".format(
 with open("{}/log.txt".format(args.outf), 'a') as f:
     f.write("Classify loss: {:5.2f} | Classify accuracy: {:3.3f}\n".format(
                     classify_loss, classify_acc))
-
-print('Saving...')
-save_model()
