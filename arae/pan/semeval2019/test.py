@@ -178,15 +178,20 @@ for niter in range(len(test1_data)):
     classify_loss += classify_loss1
     classify_acc += classify_acc1
 
-for niter in range(len(test2_data)):
-    classify_loss2, classify_acc2 = train_classifier(2, test2_data[niter])
-    classify_loss += classify_loss2
-    classify_acc += classify_acc2
-
-classify_loss = classify_loss / (len(test1_data) + len(test2_data))
-classify_acc = classify_acc / (len(test1_data) + len(test2_data))
+classify_loss = classify_loss / (len(test1_data))
+classify_acc = classify_acc / (len(test1_data))
 print("Classify loss: {:5.2f} | Classify accuracy: {:3.3f}\n".format(
                     classify_loss, classify_acc))
+
+# for niter in range(len(test2_data)):
+#     classify_loss2, classify_acc2 = train_classifier(2, test2_data[niter])
+#     classify_loss += classify_loss2
+#     classify_acc += classify_acc2
+
+# classify_loss = classify_loss / (len(test1_data) + len(test2_data))
+# classify_acc = classify_acc / (len(test1_data) + len(test2_data))
+# print("Classify loss: {:5.2f} | Classify accuracy: {:3.3f}\n".format(
+#                     classify_loss, classify_acc))
 
 # predictions = []
 # for niter in range(len(test_data)):
