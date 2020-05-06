@@ -157,9 +157,9 @@ for file in os.listdir(args.inputDataset):
         unk_idx = vocab[UNK]
         indices = [vocab[w] if w in vocab else unk_idx for w in words]
         article_ids.append(article.attrib['id'])
-        if article.attrib['id'] in ground_truth:
+        if article.attrib['id'] in ground_truth and ground_truth[article.attrib['id']] == 'true':
           test1_data.append(indices)
-          labels.append(ground_truth[article.attrib['id']])
+          labels.append('true')
         else:
           test2_data.append(indices)
           labels.append('false')
