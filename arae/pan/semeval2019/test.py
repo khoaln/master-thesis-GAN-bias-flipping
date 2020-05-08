@@ -65,14 +65,14 @@ def tokenize(path):
     lines = []
     for line in f:
       linecount += 1
-      L = line.lower() if self.lowercase else line
+      L = line.lower()
       words = L.strip().split(" ")
-      if self.maxlen > 0 and len(words) > self.maxlen:
+      if args.maxlen > 0 and len(words) > args.maxlen:
         dropped += 1
         continue
       words = [BOS_WORD] + words + [EOS_WORD]
       # vectorize
-      vocab = self.dictionary.word2idx
+      vocab = dictionary.word2idx
       unk_idx = vocab[UNK]
       indices = [vocab[w] if w in vocab else unk_idx for w in words]
       lines.append(indices)
