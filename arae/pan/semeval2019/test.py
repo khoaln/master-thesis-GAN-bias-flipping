@@ -236,15 +236,15 @@ if mode == 'eval':
       classify_acc1 = eval_classifier(classifier1, classifier2, 1, test1_data[niter])
       classify_acc += classify_acc1
 
-  classify_acc = classify_acc / (len(test1_data))
+  classify_acc = classify_acc / len(test1_data)
   print("Classify accuracy: {:3.3f}\n".format(classify_acc))
 
-  classify_acc = 0, 0
+  classify_acc = 0
   for niter in range(len(test2_data)):
       classify_acc2 = eval_classifier(classifier1, classifier2, 2, test2_data[niter])
       classify_acc += classify_acc2
 
-  classify_acc = classify_acc / (len(test2_data))
+  classify_acc = classify_acc / len(test2_data)
   print("Classify accuracy: {:3.3f}\n".format(classify_acc))
 
 elif mode == 'retrain':
