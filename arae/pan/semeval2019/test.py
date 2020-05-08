@@ -102,21 +102,23 @@ def train_classifier(classifier, whichclass, batch):
 
   return classify_loss, accuracy
 
-def eval_classifier(classifier, whichclass, batch):
+def eval_classifier(classifier1, classifier2, whichclass, batch):
   source, target, lengths = batch
   source = to_gpu(args.cuda, Variable(source))
   labels = to_gpu(args.cuda, Variable(torch.zeros(source.size(0)).fill_(whichclass-1)))
 
   code = autoencoder(0, source, lengths, noise=False, encode_only=True).detach()
-  scores = classifier(code)
-  classify_loss = F.binary_cross_entropy(scores.squeeze(1), labels)
-  classify_loss.backward()
-  classify_loss = classify_loss.cpu().data[0]
+  scores1 = classifier1(code)
+  scores2 = classifier2(code)
+  scores1 = scores1.squeeze(1)
+  scores2 = scores2.squeeze(2)
+  print(scores1)
+  print(scores2)
 
   pred = scores.data.round().squeeze(1)
   accuracy = pred.eq(labels.data).float().mean()
 
-  return classify_loss, accuracy
+  return accuracy
 
 def save_classifier_model(name='classifier_model.pt'):
   print("Saving model to {}".format(name))
@@ -230,27 +232,21 @@ if mode == 'eval':
   test2_data = batchify(test2_data, args.eval_batch_size, shuffle=False)
 
   # test classifier ----------------------------
-  classify_loss, classify_acc = 0, 0
+  classify_acc = 0
   for niter in range(len(test1_data)):
-      classify_loss1, classify_acc1 = eval_classifier(classifier1, 1, test1_data[niter])
-      classify_loss += classify_loss1
+      classify_acc1 = eval_classifier(classifier1, classifier2, 1, test1_data[niter])
       classify_acc += classify_acc1
 
-  classify_loss = classify_loss / (len(test1_data))
   classify_acc = classify_acc / (len(test1_data))
-  print("Classify loss: {:5.2f} | Classify accuracy: {:3.3f}\n".format(
-                      classify_loss, classify_acc))
+  print("Classify accuracy: {:3.3f}\n".format(classify_acc))
 
-  classify_loss, classify_acc = 0, 0
+  classify_acc = 0, 0
   for niter in range(len(test2_data)):
-      classify_loss2, classify_acc2 = eval_classifier(classifier2, 2, test2_data[niter])
-      classify_loss += classify_loss2
+      classify_acc2 = eval_classifier(classifier1, classifier2, 2, test2_data[niter])
       classify_acc += classify_acc2
 
-  classify_loss = classify_loss / (len(test2_data))
   classify_acc = classify_acc / (len(test2_data))
-  print("Classify loss: {:5.2f} | Classify accuracy: {:3.3f}\n".format(
-                      classify_loss, classify_acc))
+  print("Classify accuracy: {:3.3f}\n".format(classify_acc))
 
 elif mode == 'retrain':
   classifier = MLP_Classify(ninput=args.nhidden, noutput=1, layers=args.arch_classify)
