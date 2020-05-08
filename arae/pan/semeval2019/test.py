@@ -111,7 +111,7 @@ def eval_classifier(classifier1, classifier2, whichclass, batch):
   scores1 = classifier1(code)
   scores2 = classifier2(code)
   scores1 = scores1.squeeze(1)
-  scores2 = scores2.squeeze(2)
+  scores2 = scores2.squeeze(1)
   print(scores1)
   print(scores2)
 
