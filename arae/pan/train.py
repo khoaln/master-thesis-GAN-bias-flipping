@@ -594,13 +594,13 @@ for epoch in range(1, args.epochs+1):
                 train_ae(2, train2_data[niter], total_loss_ae2, start_time, niter)
             
             # train classifier ----------------------------
-            classify_loss1, classify_acc1 = train_classifier(2, train1_data[niter])
-            classify_loss2, classify_acc2 = train_classifier(1, train2_data[niter])
+            classify_loss2, classify_acc2 = train_classifier(2, train2_data[niter])
+            classify_loss1, classify_acc1 = train_classifier(1, train1_data[niter])
             classify_loss = (classify_loss1 + classify_loss2) / 2
             classify_acc = (classify_acc1 + classify_acc2) / 2
             # reverse to autoencoder
-            classifier_regularize(2, train1_data[niter])
-            classifier_regularize(1, train2_data[niter])
+            classifier_regularize(2, train2_data[niter])
+            classifier_regularize(1, train1_data[niter])
 
             niter += 1
 
