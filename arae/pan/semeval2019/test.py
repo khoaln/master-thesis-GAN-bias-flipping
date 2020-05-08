@@ -120,7 +120,7 @@ def eval_classifier(classifier, whichclass, batch):
 
 def save_classifier_model(name='classifier_model.pt'):
   print("Saving model to {}".format(name))
-  with open('{}/'.format(args.outputDir, name), 'wb') as f:
+  with open('{}/{}'.format(args.outputDir, name), 'wb') as f:
     torch.save(classifier.state_dict(), f)
 
 ########
