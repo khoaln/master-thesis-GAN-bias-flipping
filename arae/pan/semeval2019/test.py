@@ -112,8 +112,7 @@ def eval_classifier(classifier1, classifier2, whichclass, batch):
   scores2 = classifier2(code)
   scores1 = scores1.squeeze(1)
   scores2 = scores2.squeeze(1)
-  print(scores1)
-  print(scores2)
+  scores = scores1 > (1-scores2)
 
   pred = scores.data.round().squeeze(1)
   accuracy = pred.eq(labels.data).float().mean()
