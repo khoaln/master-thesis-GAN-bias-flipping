@@ -588,10 +588,10 @@ for epoch in range(1, args.epochs+1):
         for i in range(args.niters_ae):
             if niter == len(train1_data):
                 break  # end of epoch
-            total_loss_ae1, start_time = \
-                train_ae(1, train1_data[niter], total_loss_ae1, start_time, niter)
             total_loss_ae2, _ = \
                 train_ae(2, train2_data[niter], total_loss_ae2, start_time, niter)
+            total_loss_ae1, start_time = \
+                train_ae(1, train1_data[niter], total_loss_ae1, start_time, niter)
             
             # train classifier ----------------------------
             classify_loss2, classify_acc2 = train_classifier(2, train2_data[niter])
