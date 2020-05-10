@@ -17,7 +17,7 @@ from utils import to_gpu, batchify, Glove_Dictionary
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--model', type=str, default='classifier_model.pt', help='classifier model')
-parser.add_argument('--autoencoder_model', type=str, default='autoencoder_model.pt', help='autoencoder_model model')
+parser.add_argument('--autoencoders', type=str, default='.', help='autoencoder models')
 parser.add_argument('--inputDataset', type=str, help='input', default='.')
 parser.add_argument('--outputDir', type=str, help='output', default='.')
 parser.add_argument('--vocab', type=str, default="vocab.json",
@@ -90,7 +90,7 @@ def train_classifier(classifier, whichclass, batch):
   labels = to_gpu(args.cuda, Variable(torch.zeros(source.size(0)).fill_(whichclass-1)))
 
   # Train
-  code = autoencoder(0, source, lengths, noise=False, encode_only=True).detach()
+  code = autoencoder1(0, source, lengths, noise=False, encode_only=True).detach()
   scores = classifier(code)
   classify_loss = F.binary_cross_entropy(scores.squeeze(1), labels)
   classify_loss.backward()
@@ -107,10 +107,11 @@ def eval_classifier(classifier1, classifier2, whichclass, batch):
   source = to_gpu(args.cuda, Variable(source))
   labels = to_gpu(args.cuda, Variable(torch.zeros(source.size(0)).fill_(whichclass-1)))
 
-  code = autoencoder(0, source, lengths, noise=False, encode_only=True).detach()
-  scores1 = classifier1(code)
-  scores2 = classifier2(code)
+  code1 = autoencoder1(0, source, lengths, noise=False, encode_only=True).detach()
+  code2 = autoencoder2(0, source, lengths, noise=False, encode_only=True).detach()
+  scores1 = classifier1(code1)
   scores1 = scores1.squeeze(1)
+  scores2 = classifier2(code2)
   scores2 = scores2.squeeze(1)
   scores = scores1 > (1-scores2)
 
@@ -155,7 +156,7 @@ weights_matrix = torch.from_numpy(weights_matrix).float()
 weights_matrix = to_gpu(args.cuda, weights_matrix)
 
 ntokens = len(dictionary.word2idx)
-autoencoder = Seq2Seq2Decoder(emsize=args.emsize,
+autoencoder1 = Seq2Seq2Decoder(emsize=args.emsize,
                       nhidden=args.nhidden,
                       ntokens=ntokens,
                       nlayers=args.nlayers,
@@ -164,9 +165,22 @@ autoencoder = Seq2Seq2Decoder(emsize=args.emsize,
                       dropout=args.dropout,
                       gpu=args.cuda,
                       weights_matrix=weights_matrix)
-autoencoder.load_state_dict(torch.load(args.autoencoder_model, map_location=lambda storage, loc: storage))
+autoencoder2 = Seq2Seq2Decoder(emsize=args.emsize,
+                      nhidden=args.nhidden,
+                      ntokens=ntokens,
+                      nlayers=args.nlayers,
+                      noise_r=args.noise_r,
+                      hidden_init=args.hidden_init,
+                      dropout=args.dropout,
+                      gpu=args.cuda,
+                      weights_matrix=weights_matrix)
+autoencoder1.load_state_dict(torch.load("{}/autoencoder1_model.pt".format(args.autoencoders), 
+  map_location=lambda storage, loc: storage))
+autoencoder2.load_state_dict(torch.load("{}/autoencoder2_model.pt".format(args.autoencoders), 
+  map_location=lambda storage, loc: storage))
 if args.cuda:
-  autoencoder = autoencoder.cuda()
+  autoencoder1 = autoencoder1.cuda()
+  autoencoder2 = autoencoder2.cuda()
 
 mode = args.mode
 if mode == 'eval':
