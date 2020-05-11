@@ -118,7 +118,7 @@ def eval_classifier(classifier1, classifier2, whichclass, batch):
   # accuracy = scores.float().data.eq(labels.data).float().mean()
 
   # return accuracy
-  return scores
+  return scores.float().data
 
 def save_classifier_model(name='classifier_model.pt'):
   print("Saving model to {}".format(name))
