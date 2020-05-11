@@ -108,16 +108,17 @@ def eval_classifier(classifier1, classifier2, whichclass, batch):
   labels = to_gpu(args.cuda, Variable(torch.zeros(source.size(0)).fill_(whichclass-1)))
 
   code1 = autoencoder1(1, source, lengths, noise=False, encode_only=True).detach()
-  code2 = autoencoder2(2, source, lengths, noise=False, encode_only=True).detach()
+  code2 = autoencoder1(2, source, lengths, noise=False, encode_only=True).detach()
   scores1 = classifier1(code1)
   scores1 = scores1.squeeze(1)
   scores2 = classifier2(code2)
   scores2 = scores2.squeeze(1)
   scores = scores1 > (1-scores2)
 
-  accuracy = scores.float().data.eq(labels.data).float().mean()
+  # accuracy = scores.float().data.eq(labels.data).float().mean()
 
-  return accuracy
+  # return accuracy
+  return scores
 
 def save_classifier_model(name='classifier_model.pt'):
   print("Saving model to {}".format(name))
@@ -206,8 +207,9 @@ if mode == 'eval':
       ground_truth[child.attrib['id']] = child.attrib['hyperpartisan']
 
   outFile = open("{}/{}".format(args.outputDir, runOutputFileName), 'w')
-  test1_data = []
-  test2_data = []
+  # test1_data = []
+  # test2_data = []
+  test_data = []
   dropped = 0
   linecount = 0
   article_ids = []
@@ -229,36 +231,57 @@ if mode == 'eval':
           unk_idx = vocab[UNK]
           indices = [vocab[w] if w in vocab else unk_idx for w in words]
           article_ids.append(article.attrib['id'])
+          test_data.append(indices)
           if article.attrib['id'] in ground_truth and ground_truth[article.attrib['id']] == 'true':
-            test1_data.append(indices)
+            # test1_data.append(indices)
             labels.append('true')
           else:
-            test2_data.append(indices)
+            # test2_data.append(indices)
             labels.append('false')
 
   print("Number of sentences dropped: {} out of {} total".format(dropped, linecount))
-  print('Test set length: {}'.format(len(test1_data)))
-  print('Test set length: {}'.format(len(test2_data)))
+  # print('Test set length: {}'.format(len(test1_data)))
+  # print('Test set length: {}'.format(len(test2_data)))
 
-  test1_data = batchify(test1_data, args.eval_batch_size, shuffle=False)
-  test2_data = batchify(test2_data, args.eval_batch_size, shuffle=False)
+  # test1_data = batchify(test1_data, args.eval_batch_size, shuffle=False)
+  # test2_data = batchify(test2_data, args.eval_batch_size, shuffle=False)
 
-  # test classifier ----------------------------
-  classify_acc = 0
-  for niter in range(len(test1_data)):
-      classify_acc1 = eval_classifier(classifier1, classifier2, 1, test1_data[niter])
-      classify_acc += classify_acc1
+  # # test classifier ----------------------------
+  # classify_acc = 0
+  # for niter in range(len(test1_data)):
+  #     classify_acc1 = eval_classifier(classifier1, classifier2, 1, test1_data[niter])
+  #     classify_acc += classify_acc1
 
-  classify_acc = classify_acc / len(test1_data)
-  print("Classify accuracy: {:3.3f}\n".format(classify_acc))
+  # classify_acc = classify_acc / len(test1_data)
+  # print("Classify accuracy: {:3.3f}\n".format(classify_acc))
 
-  classify_acc = 0
-  for niter in range(len(test2_data)):
-      classify_acc2 = eval_classifier(classifier1, classifier2, 2, test2_data[niter])
-      classify_acc += classify_acc2
+  # classify_acc = 0
+  # for niter in range(len(test2_data)):
+  #     classify_acc2 = eval_classifier(classifier1, classifier2, 2, test2_data[niter])
+  #     classify_acc += classify_acc2
 
-  classify_acc = classify_acc / len(test2_data)
-  print("Classify accuracy: {:3.3f}\n".format(classify_acc))
+  # classify_acc = classify_acc / len(test2_data)
+  # print("Classify accuracy: {:3.3f}\n".format(classify_acc))
+
+  print('Test set length: {}'.format(len(test_data)))
+  predictions = []
+  for niter in range(len(test_data)):
+    scores = eval_classifier(classifier1, classifier2, 0, test_data[niter])
+    for v in scores:
+      if v == 0:
+        predictions.append('true')
+      else:
+        predictions.append('false')
+
+  print('{}, {}, {}'.format(len(predictions), len(article_ids), len(labels)))
+  if len(article_ids) == len(predictions):
+    for i in range(len(article_ids)):
+      outFile.write('{} {} {} \n'.format(article_ids[i], predictions[i], labels[i]))
+
+  outFile.close()
+
+  print('Accuracy: {}'.format(accuracy_score(labels, predictions)))
+  print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels, predictions, average='micro')))
 
 elif mode == 'retrain':
   classifier = MLP_Classify(ninput=args.nhidden, noutput=1, layers=args.arch_classify)
@@ -287,35 +310,3 @@ elif mode == 'retrain':
 else:
   print('Mode {} is not supported'.format(mode))
 
-
-
-# classify_loss = classify_loss / (len(test1_data) + len(test2_data))
-# classify_acc = classify_acc / (len(test1_data) + len(test2_data))
-# print("Classify loss: {:5.2f} | Classify accuracy: {:3.3f}\n".format(
-#                     classify_loss, classify_acc))
-
-# predictions = []
-# for niter in range(len(test_data)):
-#   # classifier.train()
-#   # classifier.zero_grad()
-#   source, target, lengths = test_data[niter]
-#   source = to_gpu(args.cuda, Variable(source))
-#   code = autoencoder(0, source, lengths, noise=False, encode_only=True).detach()
-#   scores = classifier(code)
-#   # optimizer_classify.step()
-#   pred = scores.data.round().squeeze(1)
-#   for v in pred:
-#     if v == 0:
-#       predictions.append('true')
-#     else:
-#       predictions.append('false')
-
-# print('{}, {}, {}'.format(len(predictions), len(article_ids), len(labels)))
-# if len(article_ids) == len(predictions):
-#   for i in range(len(article_ids)):
-#     outFile.write('{} {} {} \n'.format(article_ids[i], predictions[i], labels[i]))
-
-# outFile.close()
-
-# print('Accuracy: {}'.format(accuracy_score(labels, predictions)))
-# print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels, predictions, average='micro')))
