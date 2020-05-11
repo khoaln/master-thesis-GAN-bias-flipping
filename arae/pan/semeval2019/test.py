@@ -264,6 +264,7 @@ if mode == 'eval':
   # print("Classify accuracy: {:3.3f}\n".format(classify_acc))
 
   print('Test set length: {}'.format(len(test_data)))
+  test_data = batchify(test_data, args.eval_batch_size, shuffle=False)
   predictions = []
   for niter in range(len(test_data)):
     scores = eval_classifier(classifier1, classifier2, 0, test_data[niter])
