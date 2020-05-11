@@ -107,8 +107,8 @@ def eval_classifier(classifier1, classifier2, whichclass, batch):
   source = to_gpu(args.cuda, Variable(source))
   labels = to_gpu(args.cuda, Variable(torch.zeros(source.size(0)).fill_(whichclass-1)))
 
-  code1 = autoencoder1(0, source, lengths, noise=False, encode_only=True).detach()
-  code2 = autoencoder2(0, source, lengths, noise=False, encode_only=True).detach()
+  code1 = autoencoder1(1, source, lengths, noise=False, encode_only=True).detach()
+  code2 = autoencoder2(2, source, lengths, noise=False, encode_only=True).detach()
   scores1 = classifier1(code1)
   scores1 = scores1.squeeze(1)
   scores2 = classifier2(code2)
