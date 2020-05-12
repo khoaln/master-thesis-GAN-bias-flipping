@@ -263,7 +263,7 @@ if mode == 'eval':
   print('{}, {}, {}'.format(len(predictions), len(article_ids), len(labels)))
   if len(article_ids) == len(predictions):
     for i in range(len(article_ids)):
-      outFile.write('{} {} {} \n'.format(article_ids[i], predictions[i], labels[i]))
+      outFile.write('{} {} \n'.format(article_ids[i], predictions[i]))
 
   outFile.close()
 
