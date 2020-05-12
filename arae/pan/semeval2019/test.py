@@ -164,7 +164,7 @@ autoencoder = Seq2Seq2Decoder(emsize=args.emsize,
                       dropout=args.dropout,
                       gpu=args.cuda,
                       weights_matrix=weights_matrix)
-autoencoder.load_state_dict(torch.load(args.autoencoders, map_location=lambda storage, loc: storage))
+autoencoder.load_state_dict(torch.load(args.autoencoder_model, map_location=lambda storage, loc: storage))
 if args.cuda:
   autoencoder = autoencoder.cuda()
 
