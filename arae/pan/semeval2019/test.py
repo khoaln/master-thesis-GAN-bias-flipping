@@ -90,7 +90,7 @@ def train_classifier(classifier, whichclass, batch):
   labels = to_gpu(args.cuda, Variable(torch.zeros(source.size(0)).fill_(whichclass-1)))
 
   # Train
-  code = autoencoder1(0, source, lengths, noise=False, encode_only=True).detach()
+  code = autoencoder(0, source, lengths, noise=False, encode_only=True).detach()
   scores = classifier(code)
   classify_loss = F.binary_cross_entropy(scores.squeeze(1), labels)
   classify_loss.backward()
@@ -164,7 +164,7 @@ autoencoder = Seq2Seq2Decoder(emsize=args.emsize,
                       dropout=args.dropout,
                       gpu=args.cuda,
                       weights_matrix=weights_matrix)
-autoencoder1.load_state_dict(torch.load(args.autoencoders, map_location=lambda storage, loc: storage))
+autoencoder.load_state_dict(torch.load(args.autoencoders, map_location=lambda storage, loc: storage))
 if args.cuda:
   autoencoder = autoencoder.cuda()
 
