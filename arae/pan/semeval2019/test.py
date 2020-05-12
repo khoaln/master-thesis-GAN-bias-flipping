@@ -17,7 +17,7 @@ from utils import to_gpu, batchify, Glove_Dictionary
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--model', type=str, default='classifier_model.pt', help='classifier model')
-parser.add_argument('--autoencoder_model', type=str, default='.', help='autoencoder model')
+parser.add_argument('--autoencoder_model', type=str, default='autoencoder_model.pt', help='autoencoder model')
 parser.add_argument('--inputDataset', type=str, help='input', default='.')
 parser.add_argument('--outputDir', type=str, help='output', default='.')
 parser.add_argument('--vocab', type=str, default="vocab.json",
