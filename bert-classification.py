@@ -89,7 +89,7 @@ def create_input_array(sentences):
 
 x = tf.keras.layers.GlobalAveragePooling1D()(sequence_output)
 x = tf.keras.layers.Dropout(0.2)(x)
-out = tf.keras.layers.Dense(2, activation="sigmoid", name="dense_output")(x)
+out = tf.keras.layers.Dense(1, activation="sigmoid", name="dense_output")(x)
 
 model = tf.keras.models.Model(
       inputs=[input_word_ids, input_mask, segment_ids], outputs=out)
