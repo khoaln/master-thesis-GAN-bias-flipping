@@ -115,20 +115,20 @@ inputs2=create_input_array(train2)
 model.fit(inputs1,1,epochs=1,batch_size=32,validation_split=0.2,shuffle=True)
 model.fit(inputs2,0,epochs=1,batch_size=32,validation_split=0.2,shuffle=True)
 
-test1 = load_data(os.path.join(args.input, "test1.txt"))
-test2 = load_data(os.path.join(args.input, "test2.txt"))
+test1 = load_data(os.path.join(args.input, "valid1.txt"))
+test2 = load_data(os.path.join(args.input, "valid2.txt"))
 
 test_inputs1=create_input_array(test1)
 test_inputs2=create_input_array(test2)
 
 pred1 = model.predict(test_inputs1)
 pred2 = model.predict(test_inputs2)
-print(pred1)
-# labels1 = np.ones(len(pred1))
-# labels2 = np.zeros(len(pred2))
 
-# print('Accuracy: {}'.format(accuracy_score(labels1, pred1)))
-# print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels1, pred1, average='micro')))
+labels1 = np.ones(len(pred1))
+labels2 = np.zeros(len(pred2))
 
-# print('Accuracy: {}'.format(accuracy_score(labels2, pred2)))
-# print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels2, pred2, average='micro')))
+print('Accuracy: {}'.format(accuracy_score(labels1, pred1)))
+print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels1, pred1, average='micro')))
+
+print('Accuracy: {}'.format(accuracy_score(labels2, pred2)))
+print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels2, pred2, average='micro')))
