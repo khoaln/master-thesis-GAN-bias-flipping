@@ -89,7 +89,7 @@ def create_input_array(sentences):
 
 x = tf.keras.layers.GlobalAveragePooling1D()(sequence_output)
 x = tf.keras.layers.Dropout(0.2)(x)
-out = tf.keras.layers.Dense(6, activation="sigmoid", name="dense_output")(x)
+out = tf.keras.layers.Dense(2, activation="sigmoid", name="dense_output")(x)
 
 model = tf.keras.models.Model(
       inputs=[input_word_ids, input_mask, segment_ids], outputs=out)
@@ -111,8 +111,8 @@ train2 = load_data(os.path.join(args.input, "train2.txt"))
 inputs1=create_input_array(train1)
 inputs2=create_input_array(train2)
 
-model.fit(inputs1,np.ones(len(train1)),epochs=1,batch_size=32,validation_split=0.2,shuffle=True)
-model.fit(inputs2,np.ones(len(train2)),epochs=1,batch_size=32,validation_split=0.2,shuffle=True)
+model.fit(inputs1,np.ones(len(train1), dtype=tf.int32),epochs=1,batch_size=32,validation_split=0.2,shuffle=True)
+model.fit(inputs2,np.ones(len(train2), dtype=tf.int32),epochs=1,batch_size=32,validation_split=0.2,shuffle=True)
 
 test1 = load_data(os.path.join(args.input, "valid1.txt"))
 test2 = load_data(os.path.join(args.input, "valid2.txt"))
