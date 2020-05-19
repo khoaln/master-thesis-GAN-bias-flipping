@@ -4,7 +4,6 @@ import bert
 from tensorflow.keras.models import  Model
 from tqdm import tqdm
 import numpy as np
-import pandas as pd
 from collections import namedtuple
 import argparse
 import os
