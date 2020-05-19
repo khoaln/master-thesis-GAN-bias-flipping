@@ -13,6 +13,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--input', type=str, default='.', help='input folder')
 parser.add_argument('--output', type=str, default='.', help='output folder')
 parser.add_argument('--device_id', type=str, default='0')
+parser.add_argument('--mode', default='eval', type=str)
 
 args = parser.parse_args()
 os.environ['CUDA_VISIBLE_DEVICES'] = args.device_id
@@ -113,29 +114,51 @@ def load_data(path):
       lines.append(line.lower())
   return lines
 
-train1 = load_data(os.path.join(args.input, "train1.txt"))
-train2 = load_data(os.path.join(args.input, "train2.txt"))
+checkpoint_path = os.path.join(args.output, "model.ckpt")
 
-inputs1=create_input_array(train1)
-inputs2=create_input_array(train2)
+# Create a callback that saves the model's weights
+cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
+                                                 save_weights_only=True,
+                                                 verbose=1)
 
-model.fit(inputs1,np.ones(len(train1), dtype=int),epochs=1,batch_size=32,validation_split=0.2,shuffle=True)
-model.fit(inputs2,np.ones(len(train2), dtype=int),epochs=1,batch_size=32,validation_split=0.2,shuffle=True)
+if args.mode == 'train':
+  train1 = load_data(os.path.join(args.input, "train1.txt"))
+  train2 = load_data(os.path.join(args.input, "train2.txt"))
 
-test1 = load_data(os.path.join(args.input, "valid1.txt"))
-test2 = load_data(os.path.join(args.input, "valid2.txt"))
+  inputs1=create_input_array(train1)
+  inputs2=create_input_array(train2)
 
-test_inputs1=create_input_array(test1)
-test_inputs2=create_input_array(test2)
+  model.fit(
+    inputs1,
+    np.ones(len(train1), dtype=int),
+    epochs=1,
+    batch_size=32,
+    validation_split=0.2,
+    shuffle=True,
+    callbacks=[cp_callback])
+  model.fit(
+    inputs2,
+    np.ones(len(train2), dtype=int),
+    epochs=1,
+    batch_size=32,
+    validation_split=0.2,
+    shuffle=True,
+    callbacks=[cp_callback])
+else:
+  test1 = load_data(os.path.join(args.input, "valid1.txt"))
+  test2 = load_data(os.path.join(args.input, "valid2.txt"))
 
-pred1 = model.predict(test_inputs1)
-pred2 = model.predict(test_inputs2)
+  test_inputs1=create_input_array(test1)
+  test_inputs2=create_input_array(test2)
 
-labels1 = np.ones(len(pred1))
-labels2 = np.zeros(len(pred2))
+  pred1 = model.predict(test_inputs1)
+  pred2 = model.predict(test_inputs2)
 
-print('Accuracy: {}'.format(accuracy_score(labels1, pred1)))
-print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels1, pred1, average='micro')))
+  labels1 = np.ones(len(pred1))
+  labels2 = np.zeros(len(pred2))
 
-print('Accuracy: {}'.format(accuracy_score(labels2, pred2)))
-print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels2, pred2, average='micro')))
+  print('Accuracy: {}'.format(accuracy_score(labels1, pred1)))
+  print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels1, pred1, average='micro')))
+
+  print('Accuracy: {}'.format(accuracy_score(labels2, pred2)))
+  print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels2, pred2, average='micro')))
