@@ -13,6 +13,10 @@ from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 parser = argparse.ArgumentParser()
 parser.add_argument('--input', type=str, default='.', help='input folder')
 parser.add_argument('--output', type=str, default='.', help='output folder')
+parser.add_argument('--device_id', type=str, default='0')
+
+args = parser.parse_args()
+os.environ['CUDA_VISIBLE_DEVICES'] = args.device_id
 
 bert_layer=hub.KerasLayer("https://tfhub.dev/tensorflow/bert_en_uncased_L-12_H-768_A-12/1",trainable=True)
 
@@ -101,8 +105,6 @@ def load_data(path):
     for line in f:
       lines.append(line.lower())
   return lines
-
-args = parser.parse_args()
 
 train1 = load_data(os.path.join(args.input, "train1.txt"))
 train2 = load_data(os.path.join(args.input, "train2.txt"))
