@@ -138,7 +138,7 @@ if args.mode == 'train':
     callbacks=[cp_callback])
   model.fit(
     inputs2,
-    np.ones(len(train2), dtype=int),
+    np.zeros(len(train2), dtype=int),
     epochs=1,
     batch_size=32,
     validation_split=0.2,
