@@ -156,9 +156,13 @@ else:
 
   pred1 = model.predict(test_inputs1)
   pred2 = model.predict(test_inputs2)
+  pred1 = np.array(pred1, dtype=int)
+  pred2 = np.array(pred2, dtype=int)
+  print(pred1)
+  print(pred2)
 
-  labels1 = np.ones(len(pred1))
-  labels2 = np.zeros(len(pred2))
+  labels1 = np.ones(len(pred1), dtype=int)
+  labels2 = np.zeros(len(pred2), dtype=int)
 
   print('Accuracy: {}'.format(accuracy_score(labels1, pred1)))
   print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels1, pred1, average='micro')))
