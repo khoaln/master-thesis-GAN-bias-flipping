@@ -17,14 +17,14 @@ parser.add_argument('--mode', default='eval', type=str)
 
 args = parser.parse_args()
 os.environ['CUDA_VISIBLE_DEVICES'] = args.device_id
-gpus = tf.config.experimental.list_physical_devices('GPU')
-if gpus:
-  # Restrict TensorFlow to only use the first GPU
-  try:
-    tf.config.experimental.set_visible_devices(gpus[int(args.device_id)], 'GPU')
-  except RuntimeError as e:
-    # Visible devices must be set at program startup
-    print(e)
+# gpus = tf.config.experimental.list_physical_devices('GPU')
+# if gpus:
+#   # Restrict TensorFlow to only use the first GPU
+#   try:
+#     tf.config.experimental.set_visible_devices(gpus[int(args.device_id)], 'GPU')
+#   except RuntimeError as e:
+#     # Visible devices must be set at program startup
+#     print(e)
 
 bert_layer=hub.KerasLayer("https://tfhub.dev/tensorflow/bert_en_uncased_L-12_H-768_A-12/1",trainable=True)
 
