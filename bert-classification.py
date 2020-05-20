@@ -145,6 +145,9 @@ if args.mode == 'train':
     shuffle=True,
     callbacks=[cp_callback])
 else:
+  # Loads the weights
+  model.load_weights(checkpoint_path)
+
   test1 = load_data(os.path.join(args.input, "valid1.txt"))
   test2 = load_data(os.path.join(args.input, "valid2.txt"))
 
