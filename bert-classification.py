@@ -128,7 +128,7 @@ if args.mode == 'train':
   train.extend(load_data(os.path.join(args.input, "train2.txt"), 0))
   random.shuffle(train)
   train = np.array(train)
-  print(train)
+  print(train[:,0])
   inputs=create_input_array(train[:,0])
 
   model.fit(
