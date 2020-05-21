@@ -128,12 +128,11 @@ if args.mode == 'train':
   train.extend(load_data(os.path.join(args.input, "train2.txt"), 0))
   random.shuffle(train)
   train = np.array(train)
-  print(train[:,0])
   inputs=create_input_array(train[:,0])
 
   model.fit(
     inputs,
-    train[:,1],
+    np.array(train[:,1], dtype=int),
     epochs=1,
     batch_size=32,
     validation_split=0.2,
@@ -148,11 +147,11 @@ else:
   test.extend(load_data(os.path.join(args.input, "valid2.txt"), 0))
   random.shuffle(test)
   test = np.array(test)
-
   test_inputs=create_input_array(test[:,0])
 
   pred = model.predict(test_inputs)
   pred = np.array(pred, dtype=int)
+  labels = np.array(test[:,1], dtype=int)
 
-  print('Accuracy: {}'.format(accuracy_score(test[:,1], pred)))
-  print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(test[:1], pred, average='micro')))
+  print('Accuracy: {}'.format(accuracy_score(labels, pred)))
+  print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels, pred, average='micro')))
