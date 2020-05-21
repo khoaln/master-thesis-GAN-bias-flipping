@@ -7,6 +7,7 @@ import numpy as np
 from collections import namedtuple
 import argparse
 import os
+import random
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 
 parser = argparse.ArgumentParser()
@@ -107,11 +108,11 @@ model.compile(loss='binary_crossentropy',
                   optimizer='adam',
                   metrics=['accuracy'])
 
-def load_data(path):
+def load_data(path, whichclass):
   lines = []
   with open(path, 'r') as f:
     for line in f:
-      lines.append(line.lower())
+      lines.append((line.lower(), whichclass))
   return lines
 
 checkpoint_path = os.path.join(args.output, "model.ckpt")
@@ -122,23 +123,16 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
                                                  verbose=1)
 
 if args.mode == 'train':
-  train1 = load_data(os.path.join(args.input, "train1.txt"))
-  train2 = load_data(os.path.join(args.input, "train2.txt"))
-
-  inputs1=create_input_array(train1)
-  inputs2=create_input_array(train2)
+  train = []
+  train.extend(load_data(os.path.join(args.input, "train1.txt"), 1))
+  train.extend(load_data(os.path.join(args.input, "train2.txt"), 0))
+  random.shuffle(train)
+  train = np.array(train)
+  inputs=create_input_array(train[:,0])
 
   model.fit(
-    inputs1,
-    np.ones(len(train1), dtype=int),
-    epochs=1,
-    batch_size=32,
-    validation_split=0.2,
-    shuffle=True,
-    callbacks=[cp_callback])
-  model.fit(
-    inputs2,
-    np.zeros(len(train2), dtype=int),
+    inputs,
+    train[:,1],
     epochs=1,
     batch_size=32,
     validation_split=0.2,
@@ -148,24 +142,16 @@ else:
   # Loads the weights
   model.load_weights(checkpoint_path)
 
-  test1 = load_data(os.path.join(args.input, "valid1.txt"))
-  test2 = load_data(os.path.join(args.input, "valid2.txt"))
+  test = []
+  test.extend(load_data(os.path.join(args.input, "valid1.txt"), 1))
+  test.extend(load_data(os.path.join(args.input, "valid2.txt"), 0))
+  random.shuffle(test)
+  test = np.array(test)
 
-  test_inputs1=create_input_array(test1)
-  test_inputs2=create_input_array(test2)
+  test_inputs=create_input_array(test[:,0])
 
-  pred1 = model.predict(test_inputs1)
-  pred2 = model.predict(test_inputs2)
-  pred1 = np.array(pred1, dtype=int)
-  pred2 = np.array(pred2, dtype=int)
-  print(pred1)
-  print(pred2)
+  pred = model.predict(test_inputs)
+  pred = np.array(pred, dtype=int)
 
-  labels1 = np.ones(len(pred1), dtype=int)
-  labels2 = np.zeros(len(pred2), dtype=int)
-
-  print('Accuracy: {}'.format(accuracy_score(labels1, pred1)))
-  print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels1, pred1, average='micro')))
-
-  print('Accuracy: {}'.format(accuracy_score(labels2, pred2)))
-  print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels2, pred2, average='micro')))
+  print('Accuracy: {}'.format(accuracy_score(test[:,1], pred)))
+  print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(test[:1], pred, average='micro')))
