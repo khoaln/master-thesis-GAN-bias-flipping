@@ -269,6 +269,37 @@ if mode == 'eval':
 
   print('Accuracy: {}'.format(accuracy_score(labels, predictions)))
   print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels, predictions, average='micro')))
+elif mode == 'eval_multifc':
+  classifier = MLP_Classify(ninput=args.nhidden, noutput=1, layers=args.arch_classify)
+  classifier.load_state_dict(torch.load(args.model, map_location=lambda storage, loc: storage))
+
+  print(classifier)
+  if args.cuda:
+    classifier = classifier.cuda()
+
+  outFile = open("{}/{}".format(args.outputDir, runOutputFileName), 'w')
+  test_data = []
+
+  lines1 = tokenize('{}/{}'.format(args.inputDataset, 'valid1.txt'))
+  lines2 = tokenize('{}/{}'.format(args.inputDataset, 'valid2.txt'))
+  test_data.extend(lines1)
+  test_data.extend(lines2)
+  labels1 = np.zeros(len(lines1))
+  labels2 = np.ones(len(lines2))
+  labels = np.concatenate((labels1, labels2), axis=None)
+
+  print('Test set length: {}'.format(len(test_data)))
+  test_data = batchify(test_data, args.eval_batch_size, shuffle=False)
+  predictions = []
+  for niter in range(len(test_data)):
+    scores = eval_classifier(classifier, test_data[niter])
+    for v in scores:
+      predictions.append(v)
+
+  print('{}, {}, {}'.format(len(predictions), len(labels)))
+
+  print('Accuracy: {}'.format(accuracy_score(labels, predictions)))
+  print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels, predictions, average='micro')))
 
 elif mode == 'retrain':
   classifier = MLP_Classify(ninput=args.nhidden, noutput=1, layers=args.arch_classify)
