@@ -27,7 +27,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = args.device_id
 #     # Visible devices must be set at program startup
 #     print(e)
 
-bert_layer=hub.KerasLayer("https://tfhub.dev/tensorflow/bert_en_uncased_L-12_H-768_A-12/1",trainable=True)
+bert_layer=hub.KerasLayer("https://tfhub.dev/tensorflow/bert_en_uncased_L-12_H-768_A-12/2",trainable=True)
 
 MAX_SEQ_LEN=128
 input_word_ids = tf.keras.layers.Input(shape=(MAX_SEQ_LEN,), dtype=tf.int32,
@@ -154,4 +154,4 @@ else:
   labels = np.array(test[:,1], dtype=int)
 
   print('Accuracy: {}'.format(accuracy_score(labels, pred)))
-  print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels, pred, average='micro')))
+  print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels, pred, average='macro')))
