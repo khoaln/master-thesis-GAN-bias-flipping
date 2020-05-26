@@ -268,7 +268,7 @@ if mode == 'eval':
   outFile.close()
 
   print('Accuracy: {}'.format(accuracy_score(labels, predictions)))
-  print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels, predictions, average='micro')))
+  print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels, predictions, average='macro')))
 elif mode == 'eval_multifc':
   classifier = MLP_Classify(ninput=args.nhidden, noutput=1, layers=args.arch_classify)
   classifier.load_state_dict(torch.load(args.model, map_location=lambda storage, loc: storage))
@@ -299,7 +299,7 @@ elif mode == 'eval_multifc':
   print('{}, {}'.format(len(predictions), len(labels)))
 
   print('Accuracy: {}'.format(accuracy_score(labels, predictions)))
-  print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels, predictions, average='micro')))
+  print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels, predictions, average='macro')))
 
 elif mode == 'retrain':
   classifier = MLP_Classify(ninput=args.nhidden, noutput=1, layers=args.arch_classify)
