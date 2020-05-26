@@ -296,7 +296,7 @@ elif mode == 'eval_multifc':
     for v in scores:
       predictions.append(v)
 
-  print('{}, {}, {}'.format(len(predictions), len(labels)))
+  print('{}, {}'.format(len(predictions), len(labels)))
 
   print('Accuracy: {}'.format(accuracy_score(labels, predictions)))
   print('Pre_Rec_F1: {}'.format(precision_recall_fscore_support(labels, predictions, average='micro')))
