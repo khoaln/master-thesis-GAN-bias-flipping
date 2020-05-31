@@ -42,3 +42,9 @@ pan-data-article/title/train1.txt
 pan-data-article/title/train2.txt
 pan-data-article/title/valid1.txt
 pan-data-article/title/valid2.txt
+webis/train1.txt
+webis/train2.txt
+webis/valid1.txt
+webis/valid2.txt
+pan-data/content_summarizer.py
+pan-data/summary/train1.txt
