@@ -14,6 +14,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--input', type=str, default='.', help='input folder')
 parser.add_argument('--output', type=str, default='.', help='output folder')
 parser.add_argument('--device_id', type=str, default='0')
+parser.add_argument('--epochs', type=int, default=1)
 parser.add_argument('--mode', default='eval', type=str)
 
 args = parser.parse_args()
