@@ -134,7 +134,7 @@ if args.mode == 'train':
   model.fit(
     inputs,
     np.array(train[:,1], dtype=int),
-    epochs=100,
+    epochs=args.epochs,
     batch_size=32,
     validation_split=0,
     shuffle=True,
