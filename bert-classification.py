@@ -133,9 +133,9 @@ if args.mode == 'train':
   model.fit(
     inputs,
     np.array(train[:,1], dtype=int),
-    epochs=1,
+    epochs=100,
     batch_size=32,
-    validation_split=0.2,
+    validation_split=0,
     shuffle=True,
     callbacks=[cp_callback])
 else:
