@@ -9,6 +9,7 @@ import argparse
 import os
 import random
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+from datetime import datetime
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input', type=str, default='.', help='input folder')
@@ -16,6 +17,8 @@ parser.add_argument('--output', type=str, default='.', help='output folder')
 parser.add_argument('--device_id', type=str, default='0')
 parser.add_argument('--epochs', type=int, default=1)
 parser.add_argument('--mode', default='eval', type=str)
+parser.add_argument('--name', default='', type=str)
+parser.add_argument('--lr', type=float, default=1e-04)
 
 args = parser.parse_args()
 os.environ['CUDA_VISIBLE_DEVICES'] = args.device_id
@@ -106,7 +109,7 @@ model = tf.keras.models.Model(
       inputs=[input_word_ids, input_mask, segment_ids], outputs=out)
 
 model.compile(loss='binary_crossentropy',
-                  optimizer='adam',
+                  optimizer=tf.keras.optimizers.Adam(lr=args.lr),
                   metrics=['accuracy'])
 
 def load_data(path, whichclass):
@@ -123,6 +126,10 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
                                                  save_weights_only=True,
                                                  verbose=1)
 
+# Logging callback
+logdir = "logs/scalars/" + args.name + '/' + datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logdir)
+
 if args.mode == 'train':
   train = []
   train.extend(load_data(os.path.join(args.input, "train1.txt"), 1))
@@ -138,7 +145,7 @@ if args.mode == 'train':
     batch_size=32,
     validation_split=0,
     shuffle=True,
-    callbacks=[cp_callback])
+    callbacks=[cp_callback, tensorboard_callback])
 else:
   # Loads the weights
   model.load_weights(checkpoint_path)
