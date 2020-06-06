@@ -129,7 +129,7 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
 
 # Logging callback
 logdir = "logs/scalars/" + args.name + '/' + datetime.now().strftime("%Y%m%d-%H%M%S")
-# tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logdir)
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logdir)
 
 if args.mode == 'train':
   train = []
@@ -146,7 +146,7 @@ if args.mode == 'train':
     batch_size=args.batch_size,
     validation_split=0,
     shuffle=True,
-    callbacks=[cp_callback])
+    callbacks=[cp_callback, tensorboard_callback])
 else:
   # Loads the weights
   model.load_weights(checkpoint_path)
