@@ -19,6 +19,7 @@ parser.add_argument('--epochs', type=int, default=1)
 parser.add_argument('--mode', default='eval', type=str)
 parser.add_argument('--name', default='', type=str)
 parser.add_argument('--lr', type=float, default=1e-04)
+parser.add_argument('--batch_size', type=int, default=64)
 
 args = parser.parse_args()
 os.environ['CUDA_VISIBLE_DEVICES'] = args.device_id
@@ -142,7 +143,7 @@ if args.mode == 'train':
     inputs,
     np.array(train[:,1], dtype=int),
     epochs=args.epochs,
-    batch_size=32,
+    batch_size=args.batch_size,
     validation_split=0,
     shuffle=True,
     callbacks=[cp_callback, tensorboard_callback])
