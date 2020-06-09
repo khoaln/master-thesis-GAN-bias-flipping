@@ -49,7 +49,7 @@
 \frontmatter	  % Begin Roman style (i, ii, iii, iv...) page numbering
 
 % Set up the Title Page
-\title  {Thesis Title}
+\title  {Generative adversarial networks for improving fake-news detection}
 \authors  {\texorpdfstring
             {Khoa Nguyen Le}
             {Khoa Nguyen Le}
@@ -107,10 +107,10 @@
 
 \null\vfill
 % Now comes the "Funny Quote", written in italics
-\textit{``Your favorite quote''}
+\textit{``Our intelligence is what makes us human, and AI is an extension of that quality.''}
 
 \begin{flushright}
-From your favorite author\end{flushright}
+Yann LeCun\end{flushright}
 
 \vfill\vfill\vfill\vfill\vfill\vfill\null
 \clearpage  % Funny Quote page ended, start a new page
@@ -122,7 +122,12 @@ From your favorite author\end{flushright}
 \addtotoc{Abstract}  % Add the "Abstract" page entry to the Contents
 \abstract{
 \addtocontents{toc}{\vspace{1em}}  % Add a gap in the Contents, for aesthetics
-
+The disinformation news in media channels such as social media websites or online newspaper have becoming a big challenge
+for many organizations, goverments and scientific researchers. In connection to fake news, the political bias (left-sided
+or right-sided) of the news articles are recently receiving more attention. In this thesis, we leverage the Adversarially 
+Regularized AutoEncoder (ARAE) model, which enhances the adversarial autoencoder (AAE) by learning a parameterized prior
+as a Generative Adversarial Networks (GAN) to classify fake news and generate the bias-flipped headlines. We perform the 
+experiments with multiple datasets then discuss how these approaches contribute to improving fake-news detection.
 }
 
 \clearpage  % Abstract ended, start a new page
@@ -135,7 +140,11 @@ From your favorite author\end{flushright}
 % The Acknowledgements page, for thanking everyone
 \acknowledgements{
 \addtocontents{toc}{\vspace{1em}}  % Add a gap in the Contents, for aesthetics
+First, I would like to thank advisor Vinay Jayarama Setty for giving me lots of advises, datasets and also computing resources
+throughout the thesis process. I would also like to thank Nina Egeland for her administrative support. 
+Second, I thank the technical team at University of Stavanger for allocating the GPU servers to train our models.
 
+Khoa Nguyen Le, Stavanger, June 2020.
 
 }
 \clearpage  % End of the Acknowledgements

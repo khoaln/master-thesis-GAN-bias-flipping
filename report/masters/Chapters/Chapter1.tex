@@ -6,7 +6,33 @@
 
 
 \section{Motivation}
+To date, fake news can be found on any media outlets, especially social media like Facebook, Twitter and online newspapers. Thus, there's an increasing
+number of public organizations and scientific researchers trying to tackle this problem~\cite{perez2017automatic}. 
 
+While in some previous researches, the most common computational way is automatic fact-checking and relied on the news sources~\cite{perez2017automatic}, 
+our approach puts more focus on the writing style of the fake news, in particular, political-biased claims. The work from~\cite{potthast2018stylometric} 
+have shown that the articles' writing styles could be use to detect the hyperpartisan news from the more balanced ones. The style of left-sided and right-sided 
+articles appear to be more related than they have with mainstream's style or to the opposite side's style. Considering an example from~\cite{chen-etal-2018-learning}:
+
+\textit{Why Trump is right in recognizing Jerusalem as
+Israel’s capital}
+
+\textit{Trump is making a huge mistake on Jerusalem}
+
+The two headlines above are from Fox News and New York Times respectively and are about the same event of Donald Trump recognizing Jerusalem as the
+Israel's capital. The different stance in those headlines can lead the readers to very different impressions.
+
+In order to learn the style of news headlines or claims, we unaligned textual style transfer using the adversarially regularized autoencoder (ARAE). This model 
+is based on Wasserstein autoencoder (WAE) framework~\cite{Tolstikhin2018WassersteinA} and generative adversarial networks (GAN)~\cite{NIPS2014_5423} which has 
+contributed a major advancement in text generation tasks. We also use GloVe~\cite{glove} pre-trained vectors as word embedding to replace for the model's word embedding
+which only relied on the word indices in the vocabulary.
+
+The experiments have been performed on different datasets:
+\begin{itemize}
+  \item The Webis Bias Flipper 2018~\cite{stein:2018y} comprises 2781 events from allsides.com as of June 1st, 2012 till February 10, 2018. We use this dataset to generate
+the right-sided and left-sided bias articles titles.
+  \item The Hyperpartisan News dataset~\cite{johannes_kiesel_2018_1489920}
+\end{itemize}
 \section{Problem Definition}
 
 \section{Usecases/Examples}

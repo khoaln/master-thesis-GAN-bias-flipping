@@ -246,23 +246,23 @@
       \bigskip
       \bigskip 
       {\large Internal Supervisors \par}
-      {\LARGE Supervisor 1 \par}
-      {\LARGE Supervisor 2 \par}
+      {\LARGE Vinay Jayarama Setty, Department of Computer Science and Electrical Engineering, University of Stavanger \par}
+      % {\LARGE Supervisor 2 \par}
       
        \bigskip
       \bigskip
       \bigskip
-      {\large External Supervisors \par}
-      {\LARGE External Supervisor 1 \par}
-      {\LARGE External Supervisor 2 \par}
+      % {\large External Supervisors \par}
+      % {\LARGE External Supervisor 1 \par}
+      % {\LARGE External Supervisor 2 \par}
  
 
       \bigskip
       \bigskip
       \bigskip 
-      {\large Reviewers \par}
-      {\LARGE Reviewer1 \par}
-      {\LARGE Reviewer2 \par}
+      % {\large Reviewers \par}
+      % {\LARGE Reviewer1 \par}
+      % {\LARGE Reviewer2 \par}
       {\LARGE \par}
       
       %\vfill
