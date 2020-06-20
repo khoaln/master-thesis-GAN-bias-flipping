@@ -714,14 +714,14 @@ if args.mode == 'train' or args.mode == 'test':
     print('-' * 89)
     print('| end of epoch {:3d} | time: {:5.2f}s | test loss {:5.2f} | '
         'test ppl {:5.2f} | acc {:3.3f}'.
-        format(epoch, (time.time() - epoch_start_time),
+        format(args.epochs, (time.time() - epoch_start_time),
                 test_loss, math.exp(test_loss), accuracy))
     print('-' * 89)
     with open("{}/log.txt".format(args.outf), 'a') as f:
         f.write('-' * 89)
         f.write('\n| end of epoch {:3d} | time: {:5.2f}s | test loss {:5.2f} |'
                 ' test ppl {:5.2f} | acc {:3.3f}\n'.
-                format(epoch, (time.time() - epoch_start_time),
+                format(args.epochs, (time.time() - epoch_start_time),
                     test_loss, math.exp(test_loss), accuracy))
         f.write('-' * 89)
         f.write('\n')
@@ -730,14 +730,14 @@ if args.mode == 'train' or args.mode == 'test':
     print('-' * 89)
     print('| end of epoch {:3d} | time: {:5.2f}s | test loss {:5.2f} | '
         'test ppl {:5.2f} | acc {:3.3f}'.
-        format(epoch, (time.time() - epoch_start_time),
+        format(args.epochs, (time.time() - epoch_start_time),
                 test_loss, math.exp(test_loss), accuracy))
     print('-' * 89)
     with open("{}/log.txt".format(args.outf), 'a') as f:
         f.write('-' * 89)
         f.write('\n| end of epoch {:3d} | time: {:5.2f}s | test loss {:5.2f} |'
                 ' test ppl {:5.2f} | acc {:3.3f}\n'.
-                format(epoch, (time.time() - epoch_start_time),
+                format(args.epochs, (time.time() - epoch_start_time),
                     test_loss, math.exp(test_loss), accuracy))
         f.write('-' * 89)
         f.write('\n')
