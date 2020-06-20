@@ -48,3 +48,12 @@ webis/valid1.txt
 webis/valid2.txt
 pan-data/content_summarizer.py
 pan-data/summary/train1.txt
+pan-data2/title/train1.txt
+pan-data2/title/train2.txt
+pan-data2/title/valid1.txt
+pan-data2/title/valid2.txt
+hyp.txt
+LR+c.test.0
+LR+c.test.1
+ref.txt
+semeval-pan-2019-random-baseline.py
