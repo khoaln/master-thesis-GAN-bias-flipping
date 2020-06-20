@@ -710,6 +710,7 @@ if args.mode == 'train' or args.mode == 'test':
         autoencoder = autoencoder.cuda()
         classifier = classifier.cuda()
 
+    epoch_start_time = time.time()
     test_loss, accuracy = evaluate_autoencoder(1, test1_data, args.epochs+1)
     print('-' * 89)
     print('| end of epoch {:3d} | time: {:5.2f}s | test loss {:5.2f} | '
