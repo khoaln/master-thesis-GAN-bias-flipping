@@ -128,9 +128,9 @@ print(vars(args))
 os.environ['CUDA_VISIBLE_DEVICES'] = args.device_id
 
 # make output directory if it doesn't already exist
-if os.path.isdir(args.outf):
+if not os.path.isdir(args.outf):
     shutil.rmtree(args.outf)
-os.makedirs(args.outf)
+    os.makedirs(args.outf)
 
 # Set the random seed manually for reproducibility.
 random.seed(args.seed)
