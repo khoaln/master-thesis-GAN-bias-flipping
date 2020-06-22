@@ -233,6 +233,19 @@ optimizer_classify = optim.Adam(classifier.parameters(),
 
 criterion_ce = nn.CrossEntropyLoss()
 
+if os.path.isfile('{}/autoencoder_model.pt'.format(args.outf)):
+    autoencoder.load_state_dict(torch.load('{}/autoencoder_model.pt'.format(args.outf), map_location=lambda storage, loc: storage))
+    
+if os.path.isfile('{}/classifier_model.pt'.format(args.outf)):
+    classifier.load_state_dict(torch.load('{}/classifier_model.pt'.format(args.outf), map_location=lambda storage, loc: storage))
+
+if os.path.isfile('{}/gan_disc_model.pt'.format(args.outf)):
+    gan_disc.load_state_dict(torch.load('{}/gan_disc_model.pt'.format(args.outf), map_location=lambda storage, loc: storage))
+    
+if os.path.isfile('{}/gan_gen_model.pt'.format(args.outf)):
+    gan_gen.load_state_dict(torch.load('{}/gan_gen_model.pt'.format(args.outf), map_location=lambda storage, loc: storage))
+
+
 if args.cuda:
     autoencoder = autoencoder.cuda()
     gan_gen = gan_gen.cuda()
