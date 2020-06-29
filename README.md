@@ -27,6 +27,18 @@ Parameters:
   - outf: output folder
   - mode: train | test. With "train" mode, the model will also run the test after training and generate the bias-flipped sentences. "test" mode is to run the test only.
   
+## Evaluation
+  - Run ROUGE test: https://github.com/pltrdy/rouge
+  - Run the classifier from paper "Learningto flip the bias of news headlines" (Github: https://github.com/webis-de/INLG-18):
+  ```
+  python3 classifier.py --train ../data/news/LR+c.trainC --vocab ../tmp/news+c2.vocab --dev ../data/news/LR+c.dev --model ../tmp/model_epoch100_lr_1e-04_batch96.LR+c_match --max_epochs 100 --batch_size 96 --learning_rate 1e-04
+  ```
+  ```
+  python3 classifier.py --test ../data/news/LR+c.test.arae100 --vocab ../tmp/news+c2.vocab --model ../tmp/model_epoch100_lr_1e-04_batch96.LR+c_match --load_model true
+  ```
+  where the generated headlines are stored in ```data/news/LR+c.test.arae100.0``` and ```data/news/LR+c.test.arae100.1```
+  
+  
 ## References
   - Wei-Fan Chen, Henning Wachsmuth, Khalid Al-Khatib, and Benno Stein. Learningto flip the bias of news headlines. InProceedings of the 11th International Conferenceon Natural Language Generation, pages 79–88, Tilburg University, The Netherlands,November 2018. Association for Computational Linguistics.  doi: 10.18653/v1/W18-6509. URLhttps://www.aclweb.org/anthology/W18-6509.
   - Junbo, Zhao, Y. Kim, K. Zhang, A. M. Rush, and Y. LeCun.  AdversariallyRegularized Autoencoders for Generating Discrete Structures.ArXiv e-prints, June2017.
