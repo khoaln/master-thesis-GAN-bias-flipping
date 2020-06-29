@@ -28,4 +28,6 @@ Parameters:
   - mode: train | test. With "train" mode, the model will also run the test after training and generate the bias-flipped sentences. "test" mode is to run the test only.
   
 ## References
-  - Martín Pellarolo, How to use Pre-trained Word Embeddings in PyTorch, 2018. https://medium.com/@martinpella/how-to-use-pre-trained-word-embeddings-in-pytorch-71ca59249f76
+  - Wei-Fan Chen, Henning Wachsmuth, Khalid Al-Khatib, and Benno Stein. Learningto flip the bias of news headlines. InProceedings of the 11th International Conferenceon Natural Language Generation, pages 79–88, Tilburg University, The Netherlands,November 2018. Association for Computational Linguistics.  doi: 10.18653/v1/W18-6509. URLhttps://www.aclweb.org/anthology/W18-6509.
+  - Junbo, Zhao, Y. Kim, K. Zhang, A. M. Rush, and Y. LeCun.  AdversariallyRegularized Autoencoders for Generating Discrete Structures.ArXiv e-prints, June2017.
+  - Martín Pellarolo, How to use Pre-trained Word Embeddings in PyTorch, 2018. URL https://medium.com/@martinpella/how-to-use-pre-trained-word-embeddings-in-pytorch-71ca59249f76 .
